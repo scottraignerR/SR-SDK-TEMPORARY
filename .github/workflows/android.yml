@@ -23,7 +23,7 @@ jobs:
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
       run: ./gradlew --version
     - name: Build the SDK
-      run: ./gradlew --info build
+      run: ls -l && ./gradlew --info build
 #     - name: Publish the package to GitHub Registry
 #       env: 
 #         GPR_USER: ${{ secrets.GPR_USER }}
