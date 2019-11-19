@@ -18,8 +18,8 @@ jobs:
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
       run: chmod +x gradlew && ./gradlew --info build
-    - name: Publish the package to GitHub Registry
-      env: 
-        GPR_USER: ${{ secrets.GPR_USER }}
-        GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-      run: ./gradlew --info --stacktrace publis
+#     - name: Publish the package to GitHub Registry
+#       env: 
+#         GPR_USER: ${{ secrets.GPR_USER }}
+#         GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+#       run: ./gradlew --info --stacktrace publish
