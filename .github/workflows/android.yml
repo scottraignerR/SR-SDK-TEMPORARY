@@ -18,6 +18,10 @@ jobs:
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    - name: Check gradle version
+      # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
+      # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
+      run: ./gradlew --version
     - name: Build the SDK
       run: ./gradlew --info build
 #     - name: Publish the package to GitHub Registry
