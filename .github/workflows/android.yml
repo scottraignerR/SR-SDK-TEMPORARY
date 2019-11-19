@@ -1,4 +1,4 @@
-name: Android CI
+name: SDK build and test
 
 on: [push]
 
@@ -17,7 +17,9 @@ jobs:
     - name: Build with Gradle
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
-      run: chmod +x gradlew && ./gradlew --info build
+      run: chmod +x gradlew
+      run: ./gradlew wrapper --gradle-version=6.0
+      run: ./gradlew --info build
 #     - name: Publish the package to GitHub Registry
 #       env: 
 #         GPR_USER: ${{ secrets.GPR_USER }}
