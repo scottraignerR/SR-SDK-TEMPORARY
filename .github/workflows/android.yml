@@ -39,7 +39,7 @@ jobs:
       run: echo "$GITHUB_WORKFLOW"
     - name: Dump GitHub.event_name context
       env:
-        GITHUB_EVENT_NAME: ${{ toJson(githubevent_name) }}
+        GITHUB_EVENT_NAME: ${{ toJson(github.event_name) }}
       run: echo "$GITHUB_EVENT_NAME"
     
     - name: Dump job context
