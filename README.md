@@ -8,7 +8,3 @@ Primary badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20
 Integration branch badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?branch=integration)
 
 Master branch badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?branch=master)
-
-Pull Request badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?event=pull_request)
-
-Test comment for a fake pull request
