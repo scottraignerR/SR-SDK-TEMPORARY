@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: 'RealWear-RW-SDK-*.aar'
-        path: './WN-SDK-TEMPORARY/sdk/build/outputs/aar/RealWear-RW-SDK-*.aar'
+        path: './sdk/build/outputs/aar/RealWear-RW-SDK-*.aar'
 
   BranchLint:
 
