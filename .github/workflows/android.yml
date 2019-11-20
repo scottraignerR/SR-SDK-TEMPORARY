@@ -25,6 +25,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - name: Dump job context
+      env:
+        JOB_CONTEXT: ${{ toJson(job) }}
+      run: echo "$JOB_CONTEXT"
+    - name: Dump steps context
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps) }}
+      run: echo "$STEPS_CONTEXT"
+    - name: Dump runner context
+      env:
+        RUNNER_CONTEXT: ${{ toJson(runner) }}
+      run: echo "$RUNNER_CONTEXT"
+    - name: Dump strategy context
+      env:
+        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      run: echo "$STRATEGY_CONTEXT"
+    - name: Dump matrix context
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      run: echo "$MATRIX_CONTEXT"
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
     - name: Set up JDK 1.8
@@ -40,7 +64,8 @@ jobs:
       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
       run: ./gradlew --version
     - name: Build the SDK
-      run: ls -l && ./gradlew --info build
+#       run: ls -l && ./gradlew --info build
+      run: ls -l && ./gradlew --info assembleDebug
 #     - name: Publish the package to GitHub Registry
 #       env: 
 #         GPR_USER: ${{ secrets.GPR_USER }}
