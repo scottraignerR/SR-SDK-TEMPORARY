@@ -34,7 +34,10 @@ jobs:
 
   Test:
     needs: Build
+    
+    runs-on: ubuntu-latest
 
+    steps:
     - name: Run Unit Tests on Debug
       run: ./gradlew testDebugUnitTest
 
@@ -43,6 +46,9 @@ jobs:
 
   Lint:
     needs: Build
+    
+    runs-on: ubuntu-latest
 
+    steps:
     - name: Run lint
       run: ./gradlew lint
