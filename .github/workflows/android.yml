@@ -15,6 +15,9 @@ on:
     branches:
       - master
       - integration
+  
+  schedule:
+    - cron: 15 * * * *
 
 jobs:
   build1:
