@@ -17,7 +17,7 @@ on:
       - integration
 
 jobs:
-  build:
+  build1:
 
     runs-on: ubuntu-latest
 
