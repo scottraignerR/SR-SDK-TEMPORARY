@@ -17,11 +17,11 @@ on:
       - master
       - integration
   
-  schedule:
-    - cron: 15 * * * *
+#   schedule:
+#     - cron: 15 * * * *
 
 jobs:
-  build1:
+  build:
 
     runs-on: ubuntu-latest
 
