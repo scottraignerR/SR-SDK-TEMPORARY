@@ -7,7 +7,7 @@ on:
       - integration
 
 jobs:
-  BuildAndTest:
+  BranchBuildAndTest:
 
     runs-on: ubuntu-latest
 
@@ -39,7 +39,7 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
-  Lint:
+  BranchLint:
 
     runs-on: ubuntu-latest
     
