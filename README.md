@@ -7,7 +7,7 @@ Primary badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20
 
 Integration branch badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?branch=integration)
 
-MikeHamilton-patch-1 branch badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?branch=MikeHamilton-RW-patch-1)
+Master branch badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?branch=master)
 
 Pull Request badge: ![](https://github.com/realwear/WN-SDK-TEMPORARY/workflows/SDK%20build%20and%20test/badge.svg?event=pull_request)
 
