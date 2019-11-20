@@ -37,7 +37,13 @@ jobs:
       run: ./gradlew testDebugUnitTest
 
     - name: Run Unit Tests on Release
-      run: ./gradlew testReleaseUnitTest
+      run: ls -l && ./gradlew testReleaseUnitTest
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: 'RealWear-RW-SDK-*.aar'
+        path: './WN-SDK-TEMPORARY/sdk/build/outputs/aar/RealWear-RW-SDK-*.aar'
 
   BranchLint:
 
