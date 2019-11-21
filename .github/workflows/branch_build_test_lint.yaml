@@ -42,6 +42,9 @@ jobs:
     - name: Check sdk directory
       run: cd sdk && ls -l
     
+    - name: Check sdk directory again
+      run: ls -l
+    
     - name: Check build directory
       run: cd build && ls -l
     
