@@ -39,17 +39,8 @@ jobs:
     - name: Run Unit Tests on Release
       run: ls -l && ./gradlew testReleaseUnitTest
       
-    - name: Check sdk directory
-      run: cd sdk && ls -l
-    
-    - name: Check sdk directory again
-      run: ls -l
-    
-    - name: Check build directory
-      run: cd build && ls -l
-    
-    - name: Check outputs directory
-      run: cd outputs && ls -l
+    - name: Check directory
+      run: cd sdk/build/outputs && ls -l
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
