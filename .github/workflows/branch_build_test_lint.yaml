@@ -20,7 +20,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-
+    
+#     - name:
+#       run: |
+#         '
+      
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
 
@@ -40,7 +44,7 @@ jobs:
       run: ls -l && ./gradlew testReleaseUnitTest
       
     - name: Check directory
-      run: cd sdk/build/outputs && ls -l
+      run: cd sdk/build/outputs/aar/ && ls -l
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
