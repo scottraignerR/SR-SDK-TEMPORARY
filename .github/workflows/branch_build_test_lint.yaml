@@ -38,6 +38,9 @@ jobs:
 
     - name: Run Unit Tests on Release
       run: ls -l && ./gradlew testReleaseUnitTest
+      
+    - name: Check sdk directory
+      run: cd sdk && ls -l
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
