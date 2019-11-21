@@ -42,6 +42,12 @@ jobs:
     - name: Check sdk directory
       run: cd sdk && ls -l
     
+    - name: Check build directory
+      run: cd build && ls -l
+    
+    - name: Check outputs directory
+      run: cd outputs && ls -l
+    
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
