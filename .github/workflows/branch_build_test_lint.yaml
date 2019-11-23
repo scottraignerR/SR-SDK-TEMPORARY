@@ -30,10 +30,14 @@ jobs:
 #         majorVersion: ${{ grep 'majorVersion = ' build.gradle | awk '{print $3}' }}
 #         minorVersion: ${{ grep 'minorVersion = ' build.gradle | awk '{print $3}' }}
 #         patchVersion: ${{ grep 'patchVersion = ' build.gradle | awk '{print $3}' }}
-#       cat $(cat DOCKERFILE_NAME) | grep DOCKERHUB_USER= | head -n 1 | grep -o '".*"' | sed 's/"//g' > DOCKERHUB_USER
-#       echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
+#         cat $(cat DOCKERFILE_NAME) | grep DOCKERHUB_USER= | head -n 1 | grep -o '".*"' | sed 's/"//g' > DOCKERHUB_USER
+#         echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
+#         GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      run: pwd && ls -al && echo "::set-env name=patchVersion::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
+      run: pwd 
+        ls -al
+        cat build.gradle | grep 'patchVersion = ' | awk '{print $3}'
+        echo "::set-env name=patchVersion::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
         echo $patchVersion
               
     - name: Set gradle version to 6.0
