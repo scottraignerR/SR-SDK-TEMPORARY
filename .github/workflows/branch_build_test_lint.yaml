@@ -6,8 +6,17 @@ on:
       - master
       - integration
 
+  schedule:
+    - cron: 5 * * * *
+
 # TODO: How do we get branch names into here?
-# TODO: How to we get the version of the build in here?
+# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+# TODO: Need to sign the Release build, then push. https://github.com/marketplace/actions/sign-android-release
+# TODO: Use emulator to run instrumented tests: https://github.com/vgaidarji/android-github-actions/tree/master/emulator
+# TODO: Add build number: https://github.com/einaregilsson/build-number
+# TODO: Incorporate SonarQube?
+# TODO: Set up DevBot secret token vs mine.
+# TODO: Incorporate and test cron schedule
 
 jobs:
 
@@ -18,7 +27,7 @@ jobs:
       MAJOR_VERSION: 0
       MINOR_VERSION: 0
       PATCH_VERSION: 0
-    
+
     steps:
 
     - name: Run the actions/checkout lib v1
@@ -28,16 +37,15 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-        
-    # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+
     - name: Get application version
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
-        
-    - name: Echo application version
+
+    - name: Echo android application/library version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-      
+
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
       
@@ -49,30 +57,25 @@ jobs:
 
     - name: Build the Release
       run: ./gradlew assembleRelease
-    
+
     - name: Run Unit Tests on Debug
       run: ./gradlew testDebugUnitTest
 
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
-      
-    - name: Check directory
-      run: pwd && cd sdk/build/outputs/aar/ && ls -l && echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-    
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
         name: WN-SDK
-# TODO: Capture version number, place in name of artifact. Not working, variables not created prior to instantiation of the name object, so they will not evaluate.
-#         name: WN-SDK_v${{MAJOR_VERSION}}.${{MINOR_VERSION}}.${{PATCH_VERSION}} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
 
     runs-on: ubuntu-latest
-    
+
     steps:
-    
+
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
 
@@ -86,6 +89,89 @@ jobs:
 
     - name: Check gradle version
       run: ./gradlew --version
-      
+
     - name: Run lint
       run: ./gradlew lint
+
+
+
+
+# name: SDK build and test
+
+# # on: [push]
+# # on: [push, pull_request]
+# # on:
+# #   push:
+# #     # Sequence of patterns matched against refs/tags
+# #     tags:
+# #       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+# on:
+#   push:
+  
+#   pull_request:
+#     branches:
+#       - master
+#       - integration
+  
+# #   schedule:
+# #     - cron: 15 * * * *
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Run the actions/checkout lib v1
+#       uses: actions/checkout@v1
+#     - name: Set up JDK 1.8
+#       uses: actions/setup-java@v1
+#       with:
+#         java-version: 1.8
+#     - name: Set gradle version
+#       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
+#       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
+#       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+#     - name: Check gradle version
+#       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleRelease
+#       # run: chmod +x gradlew && ./gradlew clean && ./gradlew --info assembleDebug
+#       run: ./gradlew --version
+#     - name: Build the SDK
+# #       run: ls -l && ./gradlew --info build
+#       run: ls -l && ./gradlew --info assembleDebug
+# #     - name: Publish the package to GitHub Registry
+# #       env: 
+# #         GPR_USER: ${{ secrets.GPR_USER }}
+# #         GPR_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+# #       run: ./gradlew --info --stacktrace publish
+#     - name: Create Release
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+#       with:
+# #         env:
+# #           VERSION: ./gradlew -q printVersionTest
+# #         tag_name: ${{ VERSION }}
+# #         release_name: Release ${{ VERSION }}
+#         tag_name: ${{ github.ref }}
+#         release_name: Release ${{ github.ref }}
+#         body: |
+#           Changes in this Release
+#           - First Change
+#           - Second Change
+#         draft: false
+#         prerelease: false
+# # NOT WORKING
+# #     - name: Upload Release Asset
+# #       id: upload-release-asset 
+# #       uses: actions/upload-release-asset@v1.0.1
+# #       env:
+# #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# #       with:
+# #         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+# #         asset_path: sdk/build/outputs/aar/sdk-release.aar
+# #         asset_name: sdk-release.aar
+# #         asset_content_type: application/zip
+
