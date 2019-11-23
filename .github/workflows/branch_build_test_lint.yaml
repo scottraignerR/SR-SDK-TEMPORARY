@@ -26,7 +26,8 @@ jobs:
         
     # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can do local build still.
     - name: Get application version
-#       env:
+      env:
+        PATCH_VERSION: 1
 #         majorVersion: ${{ grep 'majorVersion = ' build.gradle | awk '{print $3}' }}
 #         minorVersion: ${{ grep 'minorVersion = ' build.gradle | awk '{print $3}' }}
 #         patchVersion: ${{ grep 'patchVersion = ' build.gradle | awk '{print $3}' }}
@@ -34,8 +35,7 @@ jobs:
 #         echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
 #         GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      run: pwd && ls -al && cat build.gradle | grep 'patchVersion = ' | awk '{print $3}' && echo "::set-env name=patchVersion::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
-#         echo $patchVersion
+      run: pwd && ls -al && cat build.gradle | grep 'patchVersion = ' | awk '{print $3}' && echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" && echo $PATCH_VERSION
               
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
