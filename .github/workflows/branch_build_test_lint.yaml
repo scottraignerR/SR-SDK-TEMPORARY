@@ -24,23 +24,17 @@ jobs:
       with:
         java-version: 1.8
         
-    # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can do local build still.
+    # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
     - name: Get application version
-#       env:
-#         PATCH_VERSION: 1
-#         majorVersion: ${{ grep 'majorVersion = ' build.gradle | awk '{print $3}' }}
-#         minorVersion: ${{ grep 'minorVersion = ' build.gradle | awk '{print $3}' }}
-#         patchVersion: ${{ grep 'patchVersion = ' build.gradle | awk '{print $3}' }}
-#         cat $(cat DOCKERFILE_NAME) | grep DOCKERHUB_USER= | head -n 1 | grep -o '".*"' | sed 's/"//g' > DOCKERHUB_USER
-#         echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
-#         GITHUB_CONTEXT: ${{ toJson(github) }}
-
-      run: echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" && echo "PATCH "$PATCH_VERSION
-#       run: echo "$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" > PATCH_VERSION && echo "PATCH "$PATCH_VERSION
-#       run: echo $PATCH_VERSION
-              
+      run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" &&
+        echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" &&
+        echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
+        
+    - name: Echo application version
+      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
+      
     - name: Set gradle version to 6.0
-      run: echo "PATCH "$PATCH_VERSION && chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
       
     - name: Check gradle version
       run: ./gradlew --version
@@ -63,7 +57,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: WN-SDK_$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
