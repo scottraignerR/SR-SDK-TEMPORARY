@@ -6,7 +6,7 @@ LABEL "com.github.actions.description"="Build & Publish APK on Github"
 LABEL "com.github.actions.icon"="package"
 LABEL "com.github.actions.color"="red"
 
-LABEL "repository"="https://github.com/realwear/action-release-apk/"
+LABEL "repository"="https://github.com/realwear/WN-SDK-TEMPORARY/"
 LABEL "maintainer"="MikeHamilton-RW"
 
 RUN apt update \
