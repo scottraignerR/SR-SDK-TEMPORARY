@@ -47,7 +47,7 @@ jobs:
     - name: Upload the binaries to the Actions Artifacts
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: WN-SDK
         path: sdk/build/outputs/aar
     
     - name: Releasing using Hub
