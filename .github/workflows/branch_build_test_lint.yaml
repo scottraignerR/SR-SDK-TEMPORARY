@@ -36,7 +36,7 @@ jobs:
 #         GITHUB_CONTEXT: ${{ toJson(github) }}
 
 #       run: pwd && ls -al && cat build.gradle | grep 'patchVersion = ' | awk '{print $3}' && echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" && echo $PATCH_VERSION
-      run: cat build.gradle | grep 'patchVersion = ' | awk '{print $3}' > PATCH_VERSION && echo $PATCH_VERSION
+      run: echo "$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" > PATCH_VERSION && echo $PATCH_VERSION
               
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
