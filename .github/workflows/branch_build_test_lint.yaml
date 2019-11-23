@@ -35,7 +35,7 @@ jobs:
 #         echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
 #         GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      run: echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" && echo "PATCH "$PATCH_VERSION
+      run: echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" && echo "PATCH "$PATCH_VERSION
 #       run: echo "$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" > PATCH_VERSION && echo "PATCH "$PATCH_VERSION
 #       run: echo $PATCH_VERSION
               
