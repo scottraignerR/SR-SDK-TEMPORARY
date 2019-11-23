@@ -45,8 +45,8 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: 'my-artifact'
-        path: '/sdk/build/outputs/aar/'
+        name: my-artifact
+        path: sdk/build/outputs/aar
 
   BranchLint:
 
