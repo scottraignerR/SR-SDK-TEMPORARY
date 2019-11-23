@@ -37,6 +37,8 @@ jobs:
       with:
         name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
+          
+    # TODO: Create the release first, but prior to that need to solve the version problem.
 
     - name: Publish the binaries to the Release
       uses: skx/github-action-publish-binaries@master
