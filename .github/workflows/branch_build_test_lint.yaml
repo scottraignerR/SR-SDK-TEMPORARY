@@ -62,7 +62,8 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK_v${{github.ref}}.${{github.ref}}.${{github.ref}} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: WN-SDK
+# TODO: Capture version number, place in name of artifact. Not working, variables not created prior to instantiation of the name object, so they will not evaluate.
 #         name: WN-SDK_v${{MAJOR_VERSION}}.${{MINOR_VERSION}}.${{PATCH_VERSION}} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
