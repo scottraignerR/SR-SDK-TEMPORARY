@@ -47,13 +47,14 @@ jobs:
       with:
         name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
-    
-    - name: Releasing using Hub
-      uses: realwear/action-release-apk@master
-      env:
-       GITHUB_TOKEN: ${{ secrets.TOKEN }}
-       APP_FOLDER: sdk
-       RELEASE_TITLE: WN-SDK-v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
+  
+#       TODO: Find workaround, cannot use actions from a private repo. Can possibly place inside this repo also.
+#     - name: Releasing using Hub
+#       uses: realwear/action-release-apk@master
+#       env:
+#        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#        APP_FOLDER: sdk
+#        RELEASE_TITLE: WN-SDK-v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
 
     # TODO: Create the release first, but prior to that need to solve the version problem.
 
