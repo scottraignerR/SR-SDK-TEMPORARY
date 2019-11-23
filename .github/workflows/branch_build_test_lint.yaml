@@ -26,8 +26,8 @@ jobs:
         
     # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
     - name: Get application version
-      run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" &&
-        echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')" &&
+      run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
+        echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
         
     - name: Echo application version
