@@ -66,4 +66,4 @@ jobs:
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
-       BUILD_NUMBER: $BUILD_NUMBER
+       BUILD_NUMBER: "$BUILD_NUMBER"

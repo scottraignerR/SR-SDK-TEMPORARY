@@ -78,6 +78,17 @@ jobs:
         name: WN-SDK
         path: sdk/build/outputs/aar
 
+    # TESTING
+    - name: Capture Build Number
+      uses: ./.github/release-action
+      env:
+       GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       APP_FOLDER: sdk
+       BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
+       OUTPUT_TYPE: aar # Will be 'apk' for other projects
+       RELEASE_TITLE: WN-SDK
+       BUILD_NUMBER: "$BUILD_NUMBER"
+
   BranchLint:
 
     runs-on: ubuntu-latest
