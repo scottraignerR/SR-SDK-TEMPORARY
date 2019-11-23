@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  BuildAndTest:
+  MasterPullRequestBuildAndTest:
 
     runs-on: ubuntu-latest
 
@@ -32,7 +32,7 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
-  Lint:
+  MasterPullRequestLint:
 
     runs-on: ubuntu-latest
     
