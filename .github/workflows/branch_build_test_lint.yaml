@@ -23,10 +23,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-      
-    - name: Set gradle version to 6.0
-      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
-    
+        
     # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can do local build still.
     - name: Get application version
 #       env:
@@ -36,8 +33,11 @@ jobs:
 #       cat $(cat DOCKERFILE_NAME) | grep DOCKERHUB_USER= | head -n 1 | grep -o '".*"' | sed 's/"//g' > DOCKERHUB_USER
 #       echo "::set-env name=patchVersion::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')"
 
-      run: ls -al && echo "::set-env name=patchVersion::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
+      run: pwd && ls -al && echo "::set-env name=patchVersion::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
         echo $patchVersion
+              
+    - name: Set gradle version to 6.0
+      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
       
     - name: Check gradle version
       run: ./gradlew --version
