@@ -32,6 +32,12 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        path: sdk/build/outputs/aar
+
     - name: Upload the artifacts
       uses: skx/github-action-publish-binaries@master
       env:
