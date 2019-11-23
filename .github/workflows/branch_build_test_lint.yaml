@@ -10,23 +10,11 @@ on:
 # TODO: How to we get the version of the build in here?
 
 jobs:
-  GetVersions:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Run the actions/checkout lib v1
-      uses: actions/checkout@v1
-      
-    - name: Get application version
-      run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
-        echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
-        echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
         
   BranchBuildAndTest:
 
     runs-on: ubuntu-latest
-    needs: GetVersions
-
+    
     steps:
 
     - name: Run the actions/checkout lib v1
@@ -38,10 +26,10 @@ jobs:
         java-version: 1.8
         
     # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
-#     - name: Get application version
-#       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
-#         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
-#         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
+    - name: Get application version
+      run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
+        echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
+        echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
         
     - name: Echo application version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
@@ -72,7 +60,7 @@ jobs:
       env:
         NAME_PREFIX: WN-SDK_v
       with:
-        name: WN-SDK_v${MAJOR_VERSION}.'${MINOR_VERSION}'.'${PATCH_VERSION}' # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: WN-SDK_v${{MAJOR_VERSION}}.${{MINOR_VERSION}}.${{PATCH_VERSION}} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
