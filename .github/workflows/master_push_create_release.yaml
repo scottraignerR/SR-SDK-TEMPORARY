@@ -53,7 +53,7 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
-       RELEASE_TITLE: WN-SDK-v${{ MAJOR_VERSION }}.${{ MINOR_VERSION }}.${{ PATCH_VERSION }}
+       RELEASE_TITLE: WN-SDK-v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
 
     # TODO: Create the release first, but prior to that need to solve the version problem.
 
