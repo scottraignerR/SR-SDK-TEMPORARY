@@ -1,15 +1,16 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 22
+        minSdkVersion rootProject.ext.minSdkVersion
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion rootProject.ext.minSdkVersion
+        versionCode rootProject.generateVersionCode()
+        versionName rootProject.generateVersionName()
+        setProperty("archivesBaseName", "$rootProject.ext.companyName-$rootProject.ext.appName-$versionName")
     }
 
     buildTypes {
@@ -22,6 +23,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+          abortOnError false
     }
 }
 

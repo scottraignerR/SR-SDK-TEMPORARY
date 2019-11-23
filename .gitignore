@@ -12,3 +12,9 @@ app/build/
 .idea/modules.xml
 .idea/misc.xml
 .idea/gradle.xml
+.idea/caches/
+.project
+.settings/
+sdk/.classpath
+sdk/.project
+sdk/.settings/
