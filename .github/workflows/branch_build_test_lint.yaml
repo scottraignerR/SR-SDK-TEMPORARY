@@ -26,8 +26,8 @@ jobs:
         
     # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can do local build still.
     - name: Get application version
-      env:
-        PATCH_VERSION: 1
+#       env:
+#         PATCH_VERSION: 1
 #         majorVersion: ${{ grep 'majorVersion = ' build.gradle | awk '{print $3}' }}
 #         minorVersion: ${{ grep 'minorVersion = ' build.gradle | awk '{print $3}' }}
 #         patchVersion: ${{ grep 'patchVersion = ' build.gradle | awk '{print $3}' }}
