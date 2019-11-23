@@ -1,5 +1,8 @@
 name: Master Branch Push Create Release
 
+# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+# TODO: Need to sign the Release build, then push. https://github.com/marketplace/actions/sign-android-release
+
 on:
   push:
     branches:
@@ -23,8 +26,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    
-    # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+  
     - name: Get application version
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
@@ -47,10 +49,10 @@ jobs:
       with:
         name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
-  
+    
     - name: Releasing using Hub
-      uses: ./.github/actions/action
-
+      uses: ./.github/actions
+  
 #       TODO: Find workaround, cannot use actions from a private repo. Can possibly place inside this repo also.
 #     - name: Releasing using Hub
 #       uses: realwear/action-release-apk@master
@@ -59,7 +61,7 @@ jobs:
 #        APP_FOLDER: sdk
 #        RELEASE_TITLE: WN-SDK-v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
 
-    # TODO: Create the release first, but prior to that need to solve the version problem.
+    # TODO: Create the release/tag first prior to pushing, but prior to that need to solve the version problem.
 
     # TODO: Fix, this will not work because a tag needs to be created first.
 #     - name: Publish the binaries to the Release
