@@ -32,7 +32,7 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
-    - name: Upload the artifacts
+    - name: Publish the binaries to the release
       uses: skx/github-action-publish-binaries@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
