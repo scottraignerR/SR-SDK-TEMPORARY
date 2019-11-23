@@ -59,7 +59,7 @@ jobs:
       env:
         NAME_PREFIX: WN-SDK_v
       with:
-        name: WN-SDK_v${{ MAJOR_VERSION.MINOR_VERSION.PATCH_VERSION }} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: WN-SDK_v${{MAJOR_VERSION}}.${{MINOR_VERSION}}.${{PATCH_VERSION }} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
