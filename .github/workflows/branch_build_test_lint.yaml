@@ -20,9 +20,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-
-    - name: Set gradle version
+      
+    - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    
+    # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can do local build still.
 
     - name: Check gradle version
       run: ./gradlew --version
@@ -38,6 +40,15 @@ jobs:
 
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
+      
+    - name: Check directory
+      run: pwd && cd sdk/build/outputs/aar/ && ls -l
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        path: sdk/build/outputs/aar
 
   BranchLint:
 
