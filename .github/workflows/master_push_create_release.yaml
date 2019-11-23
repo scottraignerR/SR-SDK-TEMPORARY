@@ -54,6 +54,7 @@ jobs:
       uses: ./.github/actions
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       APP_FOLDER: sdk
   
 #       TODO: Find workaround, cannot use actions from a private repo. Can possibly place inside this repo also.
 #     - name: Releasing using Hub
