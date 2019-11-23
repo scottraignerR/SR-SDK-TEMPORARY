@@ -51,7 +51,7 @@ jobs:
         path: sdk/build/outputs/aar
     
     - name: Releasing using Hub
-      uses: ./.github/actions
+      uses: ./.github/release-action
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
