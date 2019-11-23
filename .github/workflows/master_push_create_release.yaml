@@ -51,12 +51,13 @@ jobs:
         path: sdk/build/outputs/aar
     
     - name: Releasing using Hub
-      uses: ./.github/actions
+      uses: ./.github/release-action
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
+       RELEASE_TITLE: WN-SDK
   
 #       TODO: Find workaround, cannot use actions from a private repo. Can possibly place inside this repo also.
 #     - name: Releasing using Hub
