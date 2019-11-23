@@ -56,10 +56,10 @@ jobs:
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
-#       env:
-#         VERSION: ${{ v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION }}
+      env:
+        NAME_PREFIX: WN-SDK_v
       with:
-        name: WN-SDK_v{{ $MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION }} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
+        name: ${{ $NAME_PREFIX.$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION }} # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
