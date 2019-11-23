@@ -55,6 +55,7 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
+       BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
   
 #       TODO: Find workaround, cannot use actions from a private repo. Can possibly place inside this repo also.
 #     - name: Releasing using Hub
