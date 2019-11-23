@@ -49,7 +49,7 @@ jobs:
         path: sdk/build/outputs/aar
     
     - name: Releasing using Hub
-      uses: ShaunLWM/action-release-debugapk@master
+      uses: realwear/action-release-apk@master
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
