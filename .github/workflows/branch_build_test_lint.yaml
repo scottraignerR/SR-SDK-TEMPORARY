@@ -45,7 +45,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: my-artifact
+        name: WN-SDK_version # TODO: Capture version number, place in name of artifact. Will be able to use version for package creation also.
         path: sdk/build/outputs/aar
 
   BranchLint:
