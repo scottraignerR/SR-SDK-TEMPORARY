@@ -10,10 +10,14 @@ on:
 # TODO: How to we get the version of the build in here?
 
 jobs:
-        
+
   BranchBuildAndTest:
 
     runs-on: ubuntu-latest
+    env: 
+      MAJOR_VERSION: 0
+      MINOR_VERSION: 0
+      PATCH_VERSION: 0
     
     steps:
 
