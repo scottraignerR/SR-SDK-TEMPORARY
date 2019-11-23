@@ -40,7 +40,7 @@ jobs:
       run: ls -l && ./gradlew testReleaseUnitTest
       
     - name: Check directory
-      run: cd sdk/build/outputs/aar/ && ls -l
+      run: pwd && cd sdk/build/outputs/aar/ && ls -l
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
