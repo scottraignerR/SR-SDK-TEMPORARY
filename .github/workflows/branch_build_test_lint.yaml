@@ -52,7 +52,7 @@ jobs:
       run: ./gradlew testReleaseUnitTest
       
     - name: Check directory
-      run: pwd && cd sdk/build/outputs/aar/ && ls -l
+      run: pwd && cd sdk/build/outputs/aar/ && ls -l && echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
     
     - name: Upload artifact
       uses: actions/upload-artifact@master
