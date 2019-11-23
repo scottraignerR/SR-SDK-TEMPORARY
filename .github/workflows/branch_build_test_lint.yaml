@@ -6,7 +6,8 @@ on:
       - master
       - integration
 
-# How do we get branch names into here?
+# TODO: How do we get branch names into here?
+# TODO: How to we get the version of the build in here?
 
 jobs:
   BranchBuildAndTest:
