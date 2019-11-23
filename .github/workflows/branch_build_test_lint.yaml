@@ -80,7 +80,7 @@ jobs:
 
     # TESTING
     - name: Capture Build Number
-      uses: ./.github/release-action
+      uses: ./.github/example-action
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        APP_FOLDER: sdk
