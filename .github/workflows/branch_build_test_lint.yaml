@@ -13,7 +13,6 @@ on:
 # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
 # TODO: Need to sign the Release build, then push. https://github.com/marketplace/actions/sign-android-release
 # TODO: Use emulator to run instrumented tests: https://github.com/vgaidarji/android-github-actions/tree/master/emulator
-# TODO: Add build number: https://github.com/einaregilsson/build-number
 # TODO: Incorporate SonarQube?
 # TODO: Set up DevBot secret token vs mine.
 # TODO: Incorporate and test cron schedule
@@ -183,3 +182,17 @@ jobs:
 # #         asset_name: sdk-release.aar
 # #         asset_content_type: application/zip
 
+#     # WORKS AS EXPECTED!
+#     - name: Set the build number output
+#       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
+#       id: build_package
+
+#     - name: Capture Build Number
+#       uses: ./.github/example-action
+#       env:
+#        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#        APP_FOLDER: sdk
+#        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
+#        OUTPUT_TYPE: aar # Will be 'apk' for other projects
+#        RELEASE_TITLE: WN-SDK
+#        BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
