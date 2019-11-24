@@ -6,8 +6,8 @@ on:
       - master
       - integration
 
-  schedule:
-    - cron: 5 * * * *
+  # schedule:
+    # - cron: 5 * * * *
 
 # TODO: How do we get branch names into here?
 # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
