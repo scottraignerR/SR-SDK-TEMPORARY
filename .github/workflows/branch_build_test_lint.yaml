@@ -77,6 +77,10 @@ jobs:
       with:
         name: WN-SDK
         path: sdk/build/outputs/aar
+    
+    - name: Set the build number output
+      run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
+      id: build_package
 
     # TESTING
     - name: Capture Build Number
@@ -87,7 +91,7 @@ jobs:
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
-       BUILD_NUMBER: ${{ BUILD_NUMBER }}
+       BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
 
   BranchLint:
 
