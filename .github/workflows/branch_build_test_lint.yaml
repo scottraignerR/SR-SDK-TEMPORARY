@@ -16,6 +16,7 @@ on:
 # TODO: Incorporate SonarQube?
 # TODO: Set up DevBot secret token vs mine.
 # TODO: Incorporate and test cron schedule
+# TODO: Edit body of the release to include more info possibly?
 
 jobs:
 
