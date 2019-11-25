@@ -9,6 +9,7 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: realse action pulls from integration vs master, need to fix this!!
 # TODO: Edit body of the release to include more info possibly?
 # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
 # TODO: automerge and delete the old branch once all checks pass and reviewers approve:
