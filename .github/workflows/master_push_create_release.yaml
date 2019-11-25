@@ -60,7 +60,11 @@ jobs:
     
     - name: Set the build number output
       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
-      id: build_package
+      id: build_package_step
+    
+    - name: Set the commit sha for usage by release creation
+      run: echo "##[set-output name=commit_sha;]$COMMIT_SHA"
+      id: commit_sha_step
 
     - name: Create Github Release
       uses: ./.github/release-action
@@ -70,5 +74,5 @@ jobs:
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
-       BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
-       COMMIT_SHA: $GITHUB_SHA
+       BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
+       COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
