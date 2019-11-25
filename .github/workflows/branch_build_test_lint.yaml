@@ -37,10 +37,6 @@ jobs:
        
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
-
-      # TEMP step
-    - name: Echo items for testing
-      run: echo "ref is ${{ github.ref }}" && echo "ref is ${{ github.base_ref }}"
       
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
@@ -201,3 +197,7 @@ jobs:
 #        OUTPUT_TYPE: aar # Will be 'apk' for other projects
 #        RELEASE_TITLE: WN-SDK
 #        BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
+
+      # TEMP step
+#     - name: Echo items for testing
+#       run: echo "ref is ${{ github.ref }}" && echo "ref is ${{ github.base_ref }}"
