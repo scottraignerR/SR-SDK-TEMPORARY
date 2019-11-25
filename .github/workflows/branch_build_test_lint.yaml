@@ -15,7 +15,9 @@ on:
         # https://github.com/pascalgn/automerge-action
 # TODO: Incorporate and test cron schedule. NOT WORKING?
 # TODO: Need to sign the Release build, then push.
-        # https://github.com/marketplace/actions/sign-android-release
+        # https://github.com/marketplace/actions/sign-android-release\
+# TODO: Auto check for gradle updates?
+        # https://github.com/MeilCli/gradle-update-check-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
