@@ -14,6 +14,8 @@ on:
 # TODO: automerge and delete the old branch once all checks pass and reviewers approve:
         # https://github.com/pascalgn/automerge-action
 # TODO: Incorporate and test cron schedule. NOT WORKING?
+# TODO: Output build number as a comment to each PR? 
+        # https://github.com/unsplash/comment-on-pr
 # TODO: Need to sign the Release build, then push.
         # https://github.com/marketplace/actions/sign-android-release\
 # TODO: Auto check for gradle updates?
