@@ -71,4 +71,4 @@ jobs:
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
        BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
-#        COMMIT_SHA: ???
+       COMMIT_SHA: $GITHUB_SHA
