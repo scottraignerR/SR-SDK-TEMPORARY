@@ -42,7 +42,7 @@ jobs:
 
       # TEMP step
     - name: Echo items for testing
-      run: echo "branch is {{ github.ref }}"
+      run: echo "branch is ${{ github.ref }}"
       
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
