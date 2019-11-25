@@ -23,6 +23,17 @@ jobs:
                
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
+    
+    - name: Intentionally failing step
+      run: cd fakeFolder
+    
+    - name: Sample comment test
+      if: failure()
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: "Build number $BUILD_NUMBER has failed. Could not cd fakeFolder"
 
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
