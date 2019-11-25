@@ -9,14 +9,19 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: How do we get branch names into here?
-# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
-# TODO: Need to sign the Release build, then push. https://github.com/marketplace/actions/sign-android-release
-# TODO: Use emulator to run instrumented tests: https://github.com/vgaidarji/android-github-actions/tree/master/emulator
-# TODO: Incorporate SonarQube?
-# TODO: Set up DevBot secret token vs mine.
-# TODO: Incorporate and test cron schedule
 # TODO: Edit body of the release to include more info possibly?
+# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+# TODO: automerge and delete the old branch once all checks pass and reviewers approve:
+        # https://github.com/pascalgn/automerge-action
+# TODO: Incorporate and test cron schedule. NOT WORKING?
+# TODO: Need to sign the Release build, then push.
+        # https://github.com/marketplace/actions/sign-android-release\
+# TODO: Auto check for gradle updates?
+        # https://github.com/MeilCli/gradle-update-check-action
+# TODO LONG TERM: Use emulator to run instrumented tests: 
+        # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
+        # https://github.com/Malinskiy/action-android
+# TODO LONG TERM: Incorporate SonarQube?
 
 jobs:
 
@@ -197,3 +202,7 @@ jobs:
 #        OUTPUT_TYPE: aar # Will be 'apk' for other projects
 #        RELEASE_TITLE: WN-SDK
 #        BUILD_NUMBER: ${{ steps.build_package.outputs.build_number }}
+
+      # TEMP step
+#     - name: Echo items for testing
+#       run: echo "ref is ${{ github.ref }}" && echo "ref is ${{ github.base_ref }}"
