@@ -9,16 +9,14 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: How do we get branch names into here?
+# TODO: Edit body of the release to include more info possibly?
 # TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
+# TODO: Incorporate and test cron schedule. NOT WORKING?
 # TODO: Need to sign the Release build, then push. https://github.com/marketplace/actions/sign-android-release
-# TODO: Use emulator to run instrumented tests: 
+# TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
-# TODO: Incorporate SonarQube?
-# TODO: Set up DevBot secret token vs mine.
-# TODO: Incorporate and test cron schedule
-# TODO: Edit body of the release to include more info possibly?
+# TODO LONG TERM: Incorporate SonarQube?
 
 jobs:
 
@@ -42,7 +40,7 @@ jobs:
 
       # TEMP step
     - name: Echo items for testing
-      run: echo "branch is ${{ github.ref }}"
+      run: echo "ref is ${{ github.ref }}" && echo "ref is ${{ github.base_ref }}"
       
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
