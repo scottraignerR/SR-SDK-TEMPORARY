@@ -61,7 +61,7 @@ jobs:
 
     - name: Echo android application/library version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-
+    
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
       
@@ -167,6 +167,8 @@ jobs:
 # TEMP step
 #     - name: Echo items for testing
 #       run: echo "ref is ${{ github.ref }}" && echo "ref is ${{ github.base_ref }}"
+#     - name: Echo items for testing
+#       run: echo "ref is $GITHUB_SHA"
 
 
 # COMMENT TO PR, DOES NOT WORK. ISSUE ON REPO
