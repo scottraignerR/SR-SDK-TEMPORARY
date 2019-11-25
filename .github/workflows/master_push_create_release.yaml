@@ -15,12 +15,12 @@ jobs:
       PATCH_VERSION: 0
 
     steps:
-    
+
     - name: Generate build number
-      uses: einaregilsson/build-number@v2 
+      uses: einaregilsson/build-number@v2
       with:
         token: ${{secrets.github_token}}
-                
+
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
 
@@ -61,7 +61,7 @@ jobs:
     - name: Set the build number output
       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
       id: build_package_step
-    
+
     - name: Set the commit sha for usage by release creation
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
