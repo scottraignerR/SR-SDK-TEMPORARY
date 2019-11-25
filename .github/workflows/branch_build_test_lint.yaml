@@ -42,13 +42,13 @@ jobs:
     steps:
 
     - name: Generate build number
-      uses: einaregilsson/build-number@v2 
+      uses: einaregilsson/build-number@v2
       with:
-        token: ${{secrets.github_token}}   
-       
+        token: ${{secrets.github_token}}
+
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
-      
+
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
 
@@ -56,9 +56,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    
-    - name: Print commit sha
-      run: echo "Commit sha is $GITHUB_SHA"
 
     - name: Get application version
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
@@ -67,10 +64,10 @@ jobs:
 
     - name: Echo android application/library version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-    
+
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
-      
+
     - name: Check gradle version
       run: ./gradlew --version
 
