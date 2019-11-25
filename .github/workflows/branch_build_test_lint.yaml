@@ -56,6 +56,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    
+    - name: Print commit sha
+      run: echo "Commit sha is $GITHUB_SHA"
 
     - name: Get application version
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
