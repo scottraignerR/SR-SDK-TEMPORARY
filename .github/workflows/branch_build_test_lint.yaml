@@ -9,6 +9,7 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
 # TODO: Possibly increment build only in specific triggers, had an odd error when 4-5 builds were running simultaneously. See if error occurs again.
 # TODO: Incorporate actions/cache (Scott working on it)
 # TODO: realse action pulls from integration vs master, need to fix this!!

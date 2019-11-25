@@ -13,6 +13,7 @@ jobs:
       MAJOR_VERSION: 0
       MINOR_VERSION: 0
       PATCH_VERSION: 0
+      COMMIT_SHA: $GITHUB_SHA
 
     steps:
     
