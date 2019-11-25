@@ -13,7 +13,7 @@ jobs:
       MAJOR_VERSION: 0
       MINOR_VERSION: 0
       PATCH_VERSION: 0
-      COMMIT_SHA: $GITHUB_SHA
+#       COMMIT_SHA: $GITHUB_SHA
 
     steps:
     
@@ -76,4 +76,5 @@ jobs:
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
        BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
-       COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
+#        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
+       COMMIT_SHA: ${{ GITHUB_SHA }}
