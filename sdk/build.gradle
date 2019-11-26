@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 22
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion 22
         versionCode rootProject.generateVersionCode()
         versionName rootProject.generateVersionName()
         setProperty("archivesBaseName", "$rootProject.ext.companyName-$rootProject.ext.appName-$versionName")
