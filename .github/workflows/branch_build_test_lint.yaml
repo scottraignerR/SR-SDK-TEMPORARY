@@ -41,6 +41,9 @@ on:
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
 # TODO LONG TERM: Incorporate SonarQube?
+        # Must download and install, so more than likely need to Dockerize it.
+        # Create a custom github action similar to release-action, but using sonarqube.
+        # https://hub.docker.com/_/sonarqube
 
 jobs:
 
