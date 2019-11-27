@@ -10,8 +10,6 @@ template: |
 categories:
   - title: '🚀 Features'
     label: 'feature'
-  - title: '🚀 Updates'
-    label: ''
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
