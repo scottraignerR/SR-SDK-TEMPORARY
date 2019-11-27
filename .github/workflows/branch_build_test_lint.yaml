@@ -50,6 +50,8 @@ on:
         # https://hub.docker.com/_/sonarqube
 # TODO: Push a comment to Jira?
         # https://github.com/marketplace/actions/jira-add-comment
+# TODO: Incorporate Probot to auto-delete branches?
+        # https://probot.github.io/apps/delete-merged-branch/
 
 jobs:
 
