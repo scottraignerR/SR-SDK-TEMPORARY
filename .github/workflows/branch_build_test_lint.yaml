@@ -33,6 +33,10 @@ on:
         # https://github.com/unsplash/comment-on-pr
 # TODO: Auto check for gradle updates?
         # https://github.com/MeilCli/gradle-update-check-action
+# TODO: Email out release notes when a release is created.
+        # https://github.com/bitoiu/release-notify-action
+# TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
+        # https://github.com/vijaykramesh/pr-lint-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android

@@ -1,7 +1,4 @@
 name: "APK Publisher"
-branding:
-  icon: "package"
-  color: "red"
 description: "Build & Publish APK on Github"
 author: "MikeHamilton-RW"
 inputs:
