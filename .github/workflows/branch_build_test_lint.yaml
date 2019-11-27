@@ -43,6 +43,7 @@ on:
 # TODO LONG TERM: Incorporate SonarQube?
         # Must download and install, so more than likely need to Dockerize it.
         # Create a custom github action similar to release-action, but using sonarqube.
+        # OR incorporate gradle plugin, so devs will have visibility when they build locally? Hmmm. Probably not since they won't have it installed....
         # https://hub.docker.com/_/sonarqube
 
 jobs:
