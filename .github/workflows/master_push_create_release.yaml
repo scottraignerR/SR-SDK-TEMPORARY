@@ -40,6 +40,10 @@ jobs:
     - name: Echo android application/library version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
 
+    - name: Set the four digit version
+      run: echo "##[set-output name=version_build;]v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      id: version_build_output
+      
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
 
@@ -66,20 +70,59 @@ jobs:
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
     
-    # Drafts your next Release notes as Pull Requests are merged into "master"
-    - name: Create draft release notes
-      uses: toolmantim/release-drafter@v5.2.0
+    
+    # Testing, but would need a way to collect release notes
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.version_build_output.outputs.version_build }}
+        release_name: ${{ steps.version_build_output.outputs.version_build }}
+        body: |
+          ## What’s Changed
+          |
+          * Update release-drafter.yml (#86) @MikeHamilton-RW
+          * Update release-drafter.yml (#85) @MikeHamilton-RW
+          * Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW
+          * Update release-drafter.yaml (#83) @MikeHamilton-RW
+          * Update branch_build_test_lint.yaml (#82) @MikeHamilton-RW
+          * Update release-drafter.yaml (#81) @MikeHamilton-RW
+          * merge to master (#80) @MikeHamilton-RW
+          * Optimize action workflow (#79) @MikeHamilton-RW
+        draft: false
+        prerelease: false
+        
+    # NOT WORKING
+#     - name: Upload Release Asset
+#       id: upload-release-asset 
+#       uses: actions/upload-release-asset@v1.0.1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+#         asset_path: sdk/build/outputs/aar/sdk-release.aar
+#         asset_name: sdk-release.aar
+#         asset_content_type: application/zip
 
-    - name: Create Github Release
-      uses: ./.github/release-action
-      env:
-       GITHUB_TOKEN: ${{ secrets.TOKEN }}
-       APP_FOLDER: sdk
-       BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
-       OUTPUT_TYPE: aar # Will be 'apk' for other projects
-       RELEASE_TITLE: WN-SDK
-       BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
-#        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
-       COMMIT_SHA: Draft
+
+
+    
+    # Drafts your next Release notes as Pull Requests are merged into "master"
+#     - name: Create draft release notes
+#       uses: toolmantim/release-drafter@v5.2.0
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#     - name: Create Github Release
+#       uses: ./.github/release-action
+#       env:
+#        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+#        APP_FOLDER: sdk
+#        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
+#        OUTPUT_TYPE: aar # Will be 'apk' for other projects
+#        RELEASE_TITLE: WN-SDK
+#        BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
+# #        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
+#        COMMIT_SHA: Draft
