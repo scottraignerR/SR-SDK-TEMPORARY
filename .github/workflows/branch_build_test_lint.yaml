@@ -10,11 +10,15 @@ on:
     # - cron: 5 * * * *
 
 # TODO: Edit body of the release to include more info possibly?
+        # Still deciding on which release actions will be the best to use with release notes.
+        # Create realse, push aar/apk, push release notes?
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
+        # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
 # TODO: Need to sign the Release build, then push.
         # https://github.com/marketplace/actions/sign-android-release\
         # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
+        # javaExe.toString(), "-jar", apkSigner.toString(), "-w", pemFile.toString(), pk8File.toString(), apk.getAbsolutePath(), outputFile.toString());
 # TODO: Add jarsigner to verify what key signed the app. 
         # $ "jarsigner -verify -verbose -certs app.apk"
         # Result should be: - Signed by "EMAILADDRESS=info@realwear.com, OU=Software, O=RealWear Inc, L=Milpitas, ST=California, C=US"
