@@ -1,6 +1,7 @@
+name-template: 'v$NEXT_PATCH_VERSION 🌈'
+tag-template: 'v$NEXT_PATCH_VERSION'
 branches:
   - 'master'
-  - 'integration' # For testing only
 template: |
   ## What’s Changed
 
@@ -13,3 +14,5 @@ categories:
       - 'fix'
       - 'bugfix'
       - 'bug'
+  - title: '🧰 Maintenance'
+    label: 'chore'
