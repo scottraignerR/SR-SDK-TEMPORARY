@@ -3,8 +3,6 @@ FROM debian:10.1
 LABEL "version"="0.0.5"
 LABEL "com.github.actions.name"="APK Publisher"
 LABEL "com.github.actions.description"="Build & Publish APK on Github"
-LABEL "com.github.actions.icon"="package"
-LABEL "com.github.actions.color"="red"
 
 LABEL "repository"="https://github.com/realwear/WN-SDK-TEMPORARY/"
 LABEL "maintainer"="MikeHamilton-RW"
