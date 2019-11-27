@@ -9,18 +9,24 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
-# TODO: Possibly increment build only in specific triggers, had an odd error when 4-5 builds were running simultaneously. See if error occurs again.
-# TODO: Incorporate actions/cache (Scott working on it)
 # TODO: Edit body of the release to include more info possibly?
-# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
-# TODO: automerge and delete the old branch once all checks pass and reviewers approve:
-        # https://github.com/pascalgn/automerge-action
+# TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
+        # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
+# TODO: Need to sign the Release build, then push.
+        # https://github.com/marketplace/actions/sign-android-release\
+        # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
+# TODO: Add jarsigner to verify what key signed the app. 
+        # $ "jarsigner -verify -verbose -certs app.apk"
+        # Result should be: - Signed by "EMAILADDRESS=info@realwear.com, OU=Software, O=RealWear Inc, L=Milpitas, ST=California, C=US"
+                              # Digest algorithm: SHA-256
+                              # Signature algorithm: SHA256withRSA, 2048-bit key
+# TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
+        # BLOCKED, no idea how to do this just yet.
+# TODO: Incorporate actions/cache (Scott working on it)
+        # https://github.com/actions/cache
 # TODO: Incorporate and test cron schedule. NOT WORKING?
 # TODO: Output build number as a comment to each PR? 
         # https://github.com/unsplash/comment-on-pr
-# TODO: Need to sign the Release build, then push.
-        # https://github.com/marketplace/actions/sign-android-release\
 # TODO: Auto check for gradle updates?
         # https://github.com/MeilCli/gradle-update-check-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
