@@ -26,10 +26,6 @@ ext {
     companyName = "RealWear"
     appName = "RW-SDK"
     groupId = "com.core.realwear.sdk"
-    minSdkVersion = 22
-    targetSdkVersion = 22
-    compileSdkVersion = 27
-    buildToolsVersion = "28.0.3"
     majorVersion = 1
     minorVersion = 13
     patchVersion = 3
@@ -66,7 +62,9 @@ publishing {
 }
 
 public Integer generateVersionCode() {
-    return project.ext.minSdkVersion * 1000000 + project.ext.majorVersion * 10000 + project.ext.minorVersion * 100 + project.ext.patchVersion
+    // return project.getProperties().get("MIN_SDK_VERSION") * 1000000 + project.ext.majorVersion * 10000 + project.ext.minorVersion * 100 + project.ext.patchVersion
+    return project.ext.majorVersion * 10000 + project.ext.minorVersion * 100 + project.ext.patchVersion
+
 }
 
 public String generateVersionName() {

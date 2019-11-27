@@ -9,24 +9,49 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
-# TODO: Possibly increment build only in specific triggers, had an odd error when 4-5 builds were running simultaneously. See if error occurs again.
-# TODO: Incorporate actions/cache (Scott working on it)
 # TODO: Edit body of the release to include more info possibly?
-# TODO: Set version of minSdk, targetSdk, compileSdk here also? Override them preferrably so devs can still do local builds.
-# TODO: automerge and delete the old branch once all checks pass and reviewers approve:
-        # https://github.com/pascalgn/automerge-action
+        # Still deciding on which release actions will be the best to use with release notes.
+        # Create realse, push aar/apk, push release notes?
+# TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
+        # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
+        # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
+        # https://developer.android.com/studio/build/building-cmdline
+# TODO: Need to sign the Release build, then push.
+        # https://github.com/marketplace/actions/sign-android-release\
+        # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
+        # javaExe.toString(), "-jar", apkSigner.toString(), "-w", pemFile.toString(), pk8File.toString(), apk.getAbsolutePath(), outputFile.toString());
+        # https://developer.android.com/studio/build/building-cmdline
+# TODO: Add jarsigner to verify what key signed the app. 
+        # $ "jarsigner -verify -verbose -certs app.apk"
+        # Result should be: - Signed by "EMAILADDRESS=info@realwear.com, OU=Software, O=RealWear Inc, L=Milpitas, ST=California, C=US"
+                              # Digest algorithm: SHA-256
+                              # Signature algorithm: SHA256withRSA, 2048-bit key
+        # https://developer.android.com/studio/build/building-cmdline
+# TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
+        # BLOCKED, no idea how to do this just yet.
+# TODO: Incorporate actions/cache (Scott working on it)
+        # https://github.com/actions/cache
 # TODO: Incorporate and test cron schedule. NOT WORKING?
 # TODO: Output build number as a comment to each PR? 
         # https://github.com/unsplash/comment-on-pr
-# TODO: Need to sign the Release build, then push.
-        # https://github.com/marketplace/actions/sign-android-release\
 # TODO: Auto check for gradle updates?
         # https://github.com/MeilCli/gradle-update-check-action
+# TODO: Email out release notes when a release is created.
+        # https://github.com/bitoiu/release-notify-action
+# TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
+        # https://github.com/vijaykramesh/pr-lint-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
-# TODO LONG TERM: Incorporate SonarQube?
+# TODO: Incorporate SonarQube?
+        # Must download and install, so more than likely need to Dockerize it.
+        # Create a custom github action similar to release-action, but using sonarqube.
+        # OR incorporate gradle plugin, so devs will have visibility when they build locally? Hmmm. Probably not since they won't have it installed....
+        # https://hub.docker.com/_/sonarqube
+# TODO: Push a comment to Jira?
+        # https://github.com/marketplace/actions/jira-add-comment
+# TODO: Incorporate Probot to auto-delete branches?
+        # https://probot.github.io/apps/delete-merged-branch/
 
 jobs:
 
