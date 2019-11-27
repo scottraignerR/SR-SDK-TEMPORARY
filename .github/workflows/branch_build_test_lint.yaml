@@ -15,15 +15,18 @@ on:
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
+        # https://developer.android.com/studio/build/building-cmdline
 # TODO: Need to sign the Release build, then push.
         # https://github.com/marketplace/actions/sign-android-release\
         # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
         # javaExe.toString(), "-jar", apkSigner.toString(), "-w", pemFile.toString(), pk8File.toString(), apk.getAbsolutePath(), outputFile.toString());
+        # https://developer.android.com/studio/build/building-cmdline
 # TODO: Add jarsigner to verify what key signed the app. 
         # $ "jarsigner -verify -verbose -certs app.apk"
         # Result should be: - Signed by "EMAILADDRESS=info@realwear.com, OU=Software, O=RealWear Inc, L=Milpitas, ST=California, C=US"
                               # Digest algorithm: SHA-256
                               # Signature algorithm: SHA256withRSA, 2048-bit key
+        # https://developer.android.com/studio/build/building-cmdline
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
         # BLOCKED, no idea how to do this just yet.
 # TODO: Incorporate actions/cache (Scott working on it)
