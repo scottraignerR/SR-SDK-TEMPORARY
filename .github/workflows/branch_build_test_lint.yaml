@@ -55,6 +55,10 @@ on:
 # TODO: Semantic pull requests, must have specific title in order to be merged
         # Will this assist us in the future?
         # https://probot.github.io/apps/semantic-pull-requests/
+# TODO: Send both debug and release builds as uploads to the Release? 
+        # Or create two releases each time, a 1.2.3.123-DEBUG and 1.2.3.123-RELEASE?
+        # Not ideal, because release/latest won't work as we want.
+        # Or do we put both artifacts into one release? Then download them and only pull the ones we want?
 
 jobs:
 
