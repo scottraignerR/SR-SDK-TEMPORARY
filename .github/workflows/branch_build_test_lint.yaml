@@ -52,6 +52,9 @@ on:
         # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Incorporate Probot to auto-delete branches?
         # https://probot.github.io/apps/delete-merged-branch/
+# TODO: Semantic pull requests, must have specific title in order to be merged
+        # Will this assist us in the future?
+        # https://probot.github.io/apps/semantic-pull-requests/
 
 jobs:
 
