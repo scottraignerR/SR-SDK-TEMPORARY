@@ -8,8 +8,12 @@ VERSION_NAME=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}
 # hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -m "${RELEASE_TITLE}_v${VERSION_NAME}" -t ${COMMIT_SHA} v${VERSION_NAME}
 
 # FIND LAST RELEASE, GET HASH
+RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/realwear/WN-SDK-TEMPORARY/releases/latest")
+echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",'
+
 # GET ALL HASHES UP TO CURRENT
-# CAPTURE ALL MESSAGES FROM ALL COMMITS
+
+# CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS
 
 
 FILENAME=release_notes.txt
