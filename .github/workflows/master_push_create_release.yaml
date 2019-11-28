@@ -69,6 +69,11 @@ jobs:
     - name: Set the commit sha for usage by release creation
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
+  
+    - name: Create draft release notes
+      uses: toolmantim/release-drafter@v5.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Github Release
       uses: ./.github/release-action
@@ -104,10 +109,3 @@ jobs:
     #       * Optimize action workflow (#79) @MikeHamilton-RW
     #     draft: false
     #     prerelease: false
-        
-    
-    # Drafts your next Release notes as Pull Requests are merged into "master"
-#     - name: Create draft release notes
-#       uses: toolmantim/release-drafter@v5.2.0
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
