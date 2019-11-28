@@ -144,7 +144,7 @@ jobs:
       run: ./gradlew lint
 
 
-
+# TESTING
 #     - name: Publish the package to GitHub Registry
 #       env: 
 #         GPR_USER: ${{ secrets.GPR_USER }}
@@ -183,7 +183,7 @@ jobs:
 #         asset_content_type: application/zip
 
 
-#     # WORKS AS EXPECTED!
+# WORKS AS EXPECTED!
 #     - name: Set the build number output
 #       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
 #       id: build_package
