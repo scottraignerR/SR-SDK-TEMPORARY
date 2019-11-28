@@ -6,8 +6,8 @@ hub checkout master
 # MAJOR_VERSION=`cat build.gradle | grep 'majorVersion = ' | awk '{print $3}'`
 # MINOR_VERSION=`cat build.gradle | grep 'minorVersion = ' | awk '{print $3}'`
 # PATCH_VERSION=`cat build.gradle | grep 'patchVersion = ' | awk '{print $3}'`
-# VERSION_NAME=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}
-# hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -m "${RELEASE_TITLE}_v${VERSION_NAME}" -t ${COMMIT_SHA} v${VERSION_NAME}
+# VERSION_NUMBER=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}
+# hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -m "${RELEASE_TITLE}_v${VERSION_NUMBER}" -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 
 # FIND LAST RELEASE, GET HASH
@@ -26,7 +26,7 @@ COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com
 
 
 FILENAME=release_notes.txt
-echo "${RELEASE_TITLE}_v${VERSION_NAME}" > $FILENAME
+echo "${RELEASE_TITLE}_${VERSION_NUMBER}" > $FILENAME
 echo "" >> $FILENAME
 echo "## What's changed " >> $FILENAME
 echo "" >> $FILENAME
@@ -58,7 +58,7 @@ echo "* Optimize action workflow (#79) @MikeHamilton-RW" >> $FILENAME
 echo "* Commit of last release: $LAST_COMMMIT"
 echo "* Date of last release: $LAST_RELEASE_DATE"
 # Need to capture all previous commit meessages.
-hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NAME}
+hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
 
