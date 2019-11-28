@@ -20,6 +20,6 @@ echo "* Update release-drafter.yaml (#81) @MikeHamilton-RW" >> $FILENAME
 echo "* merge to master (#80) @MikeHamilton-RW" >> $FILENAME
 echo "* Optimize action workflow (#79) @MikeHamilton-RW" >> $FILENAME
 # Need to capture all previous commit meessages.
-hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F notes.txt -t ${COMMIT_SHA} v${VERSION_NAME}
+hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NAME}
 
-rm release_notes.txt
+rm $FILENAME
