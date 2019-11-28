@@ -79,10 +79,12 @@ jobs:
       uses: ./.github/release-action
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       GITHUB_REPOSITORY: ${{ github.repository }}
        APP_FOLDER: sdk
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
        RELEASE_TITLE: WN-SDK
+       VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
 
