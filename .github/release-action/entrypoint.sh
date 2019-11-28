@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 hub checkout master
 # MAJOR_VERSION=`cat build.gradle | grep 'majorVersion = ' | awk '{print $3}'`
 # MINOR_VERSION=`cat build.gradle | grep 'minorVersion = ' | awk '{print $3}'`
@@ -67,3 +69,5 @@ rm $FILENAME
 #     size=$(jq -r '.size' <<< "$value");
 #     printf '%s\t%s\t%s\n' "$name" "$type" "$size";
 # done | column -t -s$'\t'
+
+set +x
