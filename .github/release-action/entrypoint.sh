@@ -12,8 +12,10 @@ hub checkout master
 
 # FIND LAST RELEASE, GET HASH
 RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest")
-LAST_COMMMIT=$(echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",') # "target_commitish": "0628a50afe7afdf5fccf14bad02dadcdf859f055",
-LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '"created_at":.*?[^\\]",') # "created_at": "2019-10-09T02:52:17Z",
+LAST_COMMMIT=$(echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",') 
+# "target_commitish": "0628a50afe7afdf5fccf14bad02dadcdf859f055",
+LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '"created_at":.*?[^\\]",') 
+# "created_at": "2019-10-09T02:52:17Z",
 
 
 # GET ALL COMMITS FROM LAST RELEASE UP TO CURRENT
@@ -22,7 +24,7 @@ COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com
 
 
 # GET ALL PULL REQUESTS FROM LAST RELEASE UP TO CURRENT
-# PULL_REQUESTS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=closed&")
+PULL_REQUESTS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=closed&")
 
 
 FILENAME=release_notes.txt
