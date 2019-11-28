@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 hub checkout master
 # MAJOR_VERSION=`cat build.gradle | grep 'majorVersion = ' | awk '{print $3}'`
 # MINOR_VERSION=`cat build.gradle | grep 'minorVersion = ' | awk '{print $3}'`
@@ -54,6 +56,7 @@ echo "* Update release-drafter.yaml (#81) @MikeHamilton-RW" >> $FILENAME
 echo "* merge to master (#80) @MikeHamilton-RW" >> $FILENAME
 echo "* Optimize action workflow (#79) @MikeHamilton-RW" >> $FILENAME
 echo "* Commit of last release: $LAST_COMMMIT"
+echo "* Date of last release: $LAST_RELEASE_DATE"
 # Need to capture all previous commit meessages.
 hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NAME}
 
@@ -66,3 +69,5 @@ rm $FILENAME
 #     size=$(jq -r '.size' <<< "$value");
 #     printf '%s\t%s\t%s\n' "$name" "$type" "$size";
 # done | column -t -s$'\t'
+
+set +x
