@@ -12,9 +12,11 @@ hub checkout master
 
 # FIND LAST RELEASE, GET HASH
 RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest")
-LAST_COMMMIT=$(echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",') 
+# LAST_COMMMIT=$(echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",') 
+LAST_COMMMIT=$(echo $RESULT | grep -Po '(?<="target_commitish":")[^"]+') 
 # "target_commitish": "0628a50afe7afdf5fccf14bad02dadcdf859f055",
-LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '"created_at":.*?[^\\]",') 
+# LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '"created_at":.*?[^\\]",') 
+LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '(?<="created_at":")[^"]+') 
 # "created_at": "2019-10-09T02:52:17Z",
 
 
