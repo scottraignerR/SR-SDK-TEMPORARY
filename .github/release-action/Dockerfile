@@ -10,6 +10,7 @@ LABEL "maintainer"="MikeHamilton-RW"
 RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
+	&& apt install -y curl \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
