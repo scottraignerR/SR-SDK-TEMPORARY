@@ -11,6 +11,7 @@ RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
 	&& apt install -y curl \
+	&& apt install -y jq \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
