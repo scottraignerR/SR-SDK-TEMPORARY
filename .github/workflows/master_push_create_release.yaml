@@ -21,7 +21,7 @@ jobs:
       with:
         token: ${{secrets.github_token}}
 
-    - name: Print new build number
+    - name: Echo new build number
       run: echo "Build number is $BUILD_NUMBER"
 
     - name: Run the actions/checkout lib v1
@@ -32,7 +32,7 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Get application version
+    - name: Get application version (x.x.x)
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
@@ -43,6 +43,9 @@ jobs:
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]v$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
+    
+    - name: Echo the four digit version
+      run: echo ${{ steps.version_build_output.outputs.version_build }}
       
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -66,7 +69,7 @@ jobs:
       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
       id: build_package_step
 
-    - name: Set the commit sha for usage by release creation
+    - name: Set the commit sha output for usage by release creation
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
   
