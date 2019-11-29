@@ -33,10 +33,14 @@ echo "" >> $FILENAME
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
-for k in $(jq '.commit.message | keys | .[]' <<< $COMMITS); do
+for k in $COMMITS | jq '.[] | {message: .comit.message}'; do
     echo "* ${k}" >> $FILENAME# author to come later.
 #     value=$(jq -r ".children.values[$k]" file);
 done
+# for k in $(jq '.commit.message | keys | .[]' <<< $COMMITS); do
+#     echo "* ${k}" >> $FILENAME# author to come later.
+# #     value=$(jq -r ".children.values[$k]" file);
+# done
 # PRs
 # for k in $(jq '.title | keys | .[]' file); do
 #     value=$(jq -r ".children.values[$k]" file);
