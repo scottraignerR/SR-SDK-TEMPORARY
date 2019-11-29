@@ -30,7 +30,7 @@ PULL_REQUESTS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.gith
 
 
 FILENAME=release_notes.txt
-echo "${RELEASE_TITLE}_${VERSION_NUMBER}" > $FILENAME
+echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
 echo "" >> $FILENAME
 echo "## What's changed " >> $FILENAME
 echo "" >> $FILENAME
