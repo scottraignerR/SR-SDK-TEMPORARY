@@ -3,34 +3,29 @@
 set -x
 
 hub checkout master
-# MAJOR_VERSION=`cat build.gradle | grep 'majorVersion = ' | awk '{print $3}'`
-# MINOR_VERSION=`cat build.gradle | grep 'minorVersion = ' | awk '{print $3}'`
-# PATCH_VERSION=`cat build.gradle | grep 'patchVersion = ' | awk '{print $3}'`
-# VERSION_NUMBER=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}
-# hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -m "${RELEASE_TITLE}_v${VERSION_NUMBER}" -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 
-# FIND LAST RELEASE, GET HASH
+# FIND LAST RELEASE, GET HASH AND DATE OF HASH
 RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest")
-# LAST_COMMMIT=$(echo $RESULT | grep -Po '"target_commitish":.*?[^\\]",') 
 LAST_COMMMIT=$(echo $RESULT | grep -Po '(?<="target_commitish": ")[^"]+') 
 # "target_commitish": "0628a50afe7afdf5fccf14bad02dadcdf859f055",
-# LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '"created_at":.*?[^\\]",') 
-LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '(?<="created_at": ")[^"]+') 
+# LAST_RELEASE_DATE=$(echo $RESULT | grep -Po '(?<="created_at": ")[^"]+') # TODO: pulls both 'created_at' dates, need only first.
 # "created_at": "2019-10-09T02:52:17Z",
 
 
 # GET ALL COMMITS FROM LAST RELEASE UP TO CURRENT
-# COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/compare/${LAST_COMMMIT}...${COMMIT_SHA}")
-COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?since=${LAST_RELEASE_DATE}")
+COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/compare/${LAST_COMMMIT}...${COMMIT_SHA}")
+# COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?since=${LAST_RELEASE_DATE}")
 
 
+set +x # Too much info to print.
 # GET ALL PULL REQUESTS FROM LAST RELEASE UP TO CURRENT
 PULL_REQUESTS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=closed&")
+set -x
 
 
 FILENAME=release_notes.txt
-echo "${RELEASE_TITLE}_${VERSION_NUMBER}" > $FILENAME
+echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
 echo "" >> $FILENAME
 echo "## What's changed " >> $FILENAME
 echo "" >> $FILENAME
