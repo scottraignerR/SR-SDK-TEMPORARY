@@ -36,7 +36,8 @@ echo "" >> ${FILENAME}
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
 IFS=$'\n'
-for item in $(echo ${COMMITS} | jq -r '.[] .commit.message')
+jq --version
+for item in $(echo ${COMMITS} | jq -r '.[].commit.message')
 do
     echo -n '* ' >> ${FILENAME}
     echo ${item//[$'\t\r\n']} >> ${FILENAME}
