@@ -28,18 +28,18 @@ set -x
 
 FILENAME=release_notes.txt
 echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
-echo "" >> $FILENAME
-echo "## What's changed " >> $FILENAME
-echo "" >> $FILENAME
+echo "" >> ${FILENAME}
+echo "## What's changed " >> ${FILENAME}
+echo "" >> ${FILENAME}
 
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
-for item in $($COMMITS | jq -r '.[] .commit.message | @base64')
+for item in $(${COMMITS} | jq -r '.[] .commit.message | @base64')
 do
-    echo -n '* ' >> $FILENAME
-    echo ${item//[$'\t\r\n ']} | base64 --decode >> $FILENAME
-    echo '' >> $FILENAME
+    echo -n '* ' >> ${FILENAME}
+    echo ${item//[$'\t\r\n ']} | base64 --decode >> ${FILENAME}
+    echo '' >> ${FILENAME}
 done
 # for k in $($COMMITS | jq '.[] | {message: .commit.message}'); do
 #     echo "* ${k}" >> $FILENAME# author to come later.
