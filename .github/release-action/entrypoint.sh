@@ -35,16 +35,16 @@ echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
-for item in $(echo ${COMMITS} | jq -r '.[] .commit.message | @base64')
+IFS=$'\n'
+for item in $(echo ${COMMITS} | jq -r '.[] .commit.message')
 do
     echo -n '* ' >> ${FILENAME}
-    echo ${item//[$'\t\r\n ']} | base64 --decode >> ${FILENAME}
-    echo '' >> ${FILENAME}
+    echo ${item//[$'\t\r\n']} >> ${FILENAME}
 done
-# for k in $($COMMITS | jq '.[] | {message: .commit.message}'); do
-#     echo "* ${k}" >> $FILENAME# author to come later.
-# #     value=$(jq -r ".children.values[$k]" file);
-# done
+
+
+
+
 
 echo "* JUNK: Update release-drafter.yml (#85) @MikeHamilton-RW" >> $FILENAME
 echo "* Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW" >> $FILENAME
