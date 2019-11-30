@@ -13,9 +13,11 @@ LAST_COMMMIT=$(echo $RESULT | grep -Po '(?<="target_commitish": ")[^"]+')
 # "created_at": "2019-10-09T02:52:17Z",
 
 
+set +x
 # GET ALL COMMITS FROM LAST RELEASE UP TO CURRENT
 COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/compare/${LAST_COMMMIT}...${COMMIT_SHA}")
 # COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?since=${LAST_RELEASE_DATE}")
+set -x
 
 
 set +x # Too much info to print.
