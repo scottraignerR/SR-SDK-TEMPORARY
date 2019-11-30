@@ -9,10 +9,9 @@ LABEL "maintainer"="MikeHamilton-RW"
 
 RUN apt update \
 	&& apt -y upgrade \
-	&& apt-cache madison jq \
 	&& apt install -y hub \
 	&& apt install -y curl \
-	&& apt install -y jq \
+	&& apt install -y jq=1.6 \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
