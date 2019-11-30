@@ -35,23 +35,15 @@ echo "" >> $FILENAME
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
-for k in $($COMMITS | jq '.[] | {message: .commit.message}'); do
-    echo "* ${k}" >> $FILENAME# author to come later.
-#     value=$(jq -r ".children.values[$k]" file);
+for item in $(cat $1 | jq -r '.[] .commit.message | @base64'); do
+    echo -n '* '
+    echo ${item//[$'\t\r\n ']} | base64 --decode >> $FILENAME
+    echo '' >> $FILENAME
 done
-# for k in $(jq '.commit.message | keys | .[]' <<< $COMMITS); do
+# for k in $($COMMITS | jq '.[] | {message: .commit.message}'); do
 #     echo "* ${k}" >> $FILENAME# author to come later.
 # #     value=$(jq -r ".children.values[$k]" file);
 # done
-# PRs
-# for k in $(jq '.title | keys | .[]' file); do
-#     value=$(jq -r ".children.values[$k]" file);
-#     name=$(jq -r '.path.name' <<< "$value");
-#     type=$(jq -r '.type' <<< "$value");
-#     size=$(jq -r '.size' <<< "$value");
-#     printf '%s\t%s\t%s\n' "$name" "$type" "$size";
-# done
-
 
 echo "* JUNK: Update release-drafter.yml (#85) @MikeHamilton-RW" >> $FILENAME
 echo "* Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW" >> $FILENAME
