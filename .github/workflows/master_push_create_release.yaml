@@ -73,10 +73,10 @@ jobs:
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
   
-    - name: Create draft release notes
-      uses: toolmantim/release-drafter@v5.2.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Create draft release notes
+#       uses: toolmantim/release-drafter@v5.2.0
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Github Release
       uses: ./.github/release-action
