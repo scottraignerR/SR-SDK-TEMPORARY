@@ -35,8 +35,9 @@ echo "" >> $FILENAME
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS AND PULL REQUESTS # https://unix.stackexchange.com/questions/477210/looping-through-json-array-in-shell-script
 # COMMITS
-for item in $($COMMITS | jq -r '.[] .commit.message | @base64'); do
-    echo -n '* '
+for item in $($COMMITS | jq -r '.[] .commit.message | @base64')
+do
+    echo -n '* ' >> $FILENAME
     echo ${item//[$'\t\r\n ']} | base64 --decode >> $FILENAME
     echo '' >> $FILENAME
 done
