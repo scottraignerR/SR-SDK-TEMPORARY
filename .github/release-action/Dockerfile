@@ -1,6 +1,6 @@
 FROM debian:10.1
 
-LABEL "version"="0.0.5"
+LABEL "version"="0.1.0"
 LABEL "com.github.actions.name"="APK Publisher"
 LABEL "com.github.actions.description"="Build & Publish APK on Github"
 
@@ -11,7 +11,7 @@ RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
 	&& apt install -y curl \
-	&& apt install -y jq=1.6-1 \
+	&& apt install -y jq \
 	&& apt autoremove \
 	&& apt autoclean \
 	&& apt clean
