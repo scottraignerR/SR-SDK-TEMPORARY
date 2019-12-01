@@ -37,7 +37,8 @@ echo "" >> ${FILENAME}
 # COMMITS
 IFS=$'\n'
 jq --version
-set
+
+set +o braceexpand
 
 if [[ -o braceexpand ]]
 then
