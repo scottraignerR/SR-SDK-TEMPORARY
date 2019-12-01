@@ -37,6 +37,15 @@ echo "" >> ${FILENAME}
 # COMMITS
 IFS=$'\n'
 jq --version
+set
+
+if [[ -o braceexpand ]]
+then
+    echo "Brace expand is on"
+else
+    echo "It is off"
+fi
+
 for item in $(echo ${COMMITS} | jq -r '.[].commit.message')
 do
     echo -n '* ' >> ${FILENAME}
