@@ -21,10 +21,13 @@ echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
 IFS=$'\n'
-for item in $(echo ${COMMITS} | jq -r '.[].commit.message')
+for item in $(echo ${COMMITS} | jq -r '.[]')
 do
+    MESSAGE=$(jq -r '.commit.message')
+    AUTHOR=$(jq -r '.author.login')
     echo -n '* ' >> ${FILENAME}
-    echo ${item//[$'\t\r\n']} >> ${FILENAME}
+    echo -n ${MESSAGE//[$'\t\r\n']} >> ${FILENAME}
+    echo "@"${AUTHOR//[$'\t\r\n']} >> ${FILENAME}
 done
 
 echo "* JUNK: Update release-drafter.yml (#85) @MikeHamilton-RW" >> $FILENAME
