@@ -2,7 +2,6 @@
 
 hub checkout master
 
-
 # FIND LAST RELEASE, GET HASH AND DATE OF HASH
 RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest")
 LAST_COMMMIT=$(echo $RESULT | jq -r '.target_commitish')
