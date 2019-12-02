@@ -21,7 +21,7 @@ echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
 IFS=$'\n'
-for item in $(echo ${COMMITS} | ./jq-linux64_1_6 -r '.[].commit.message')
+for item in $(echo ${COMMITS} | jq -r '.[].commit.message')
 do
     echo -n '* ' >> ${FILENAME}
     echo ${item//[$'\t\r\n']} >> ${FILENAME}
