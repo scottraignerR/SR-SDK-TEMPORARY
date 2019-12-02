@@ -1,9 +1,5 @@
 FROM debian:10.1
 
-LABEL "version"="0.1.0"
-LABEL "com.github.actions.name"="APK Publisher"
-LABEL "com.github.actions.description"="Build & Publish APK on Github"
-
 LABEL "repository"="https://github.com/realwear/WN-SDK-TEMPORARY/"
 LABEL "maintainer"="MikeHamilton-RW"
 
