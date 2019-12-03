@@ -18,6 +18,7 @@ echo "" >> ${FILENAME}
 echo "## What's changed " >> ${FILENAME}
 echo "" >> ${FILENAME}
 
+set -x
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
 IFS=$''
 echo ${ALL_COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.author.date' | (
@@ -35,6 +36,7 @@ echo ${ALL_COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.autho
         echo $out_message >> ${FILENAME}
     done
 )
+set +x
 
 # one line, ugly solution. Not ideal
 # echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
