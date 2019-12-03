@@ -7,11 +7,9 @@ RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/
 LAST_COMMMIT=$(echo $RESULT | jq -r '.target_commitish')
 LAST_RELEASE_DATE=$(echo $RESULT | jq -r '.created_at')
 
-set -x
-
 # GET ALL COMMITS FROM LAST RELEASE UP TO CURRENT
 # COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/compare/${LAST_COMMMIT}...${COMMIT_SHA}")
-# For this way, use .basecommit.commit.message instead of simply .commit.message
+# For this way, use .basecommit.commit.message instead of simply .commit.message as done below
 COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits?since=${LAST_RELEASE_DATE}")
 
 FILENAME=release_notes.txt
@@ -38,21 +36,12 @@ echo ${COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.author.da
     done
 )
 
-set +x
-
 # one line, ugly solution. Not ideal
 # echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
 
-echo "* JUNK: Update release-drafter.yml (#85) @MikeHamilton-RW" >> $FILENAME
-echo "* Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW" >> $FILENAME
-echo "* Update release-drafter.yaml (#83) @MikeHamilton-RW" >> $FILENAME
-echo "* Update branch_build_test_lint.yaml (#82) @MikeHamilton-RW" >> $FILENAME
-echo "* Update release-drafter.yaml (#81) @MikeHamilton-RW" >> $FILENAME
-echo "* merge to master (#80) @MikeHamilton-RW" >> $FILENAME
-echo "* Optimize action workflow (#79) @MikeHamilton-RW" >> $FILENAME
 echo "* Commit of last release: $LAST_COMMMIT"
 echo "* Date of last release: $LAST_RELEASE_DATE"
-# Need to capture all previous commit meessages.
+
 hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
