@@ -36,7 +36,7 @@ echo ${COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.author.da
     done
 )
 
-# one line, ugly solution. Not ideal
+# one line, ugly solution. Not ideal.
 # echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
 
 echo "* Commit of last release: $LAST_COMMMIT"
