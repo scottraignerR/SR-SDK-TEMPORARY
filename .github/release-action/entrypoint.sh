@@ -45,3 +45,4 @@ echo "* Date of last release: $LAST_RELEASE_DATE"
 hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
+
