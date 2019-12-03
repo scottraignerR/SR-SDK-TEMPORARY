@@ -20,7 +20,7 @@ echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
 IFS=$''
-echo ${ALL_COMMITS} | ./jq-osx-amd64_1_5 -r '.[] | .commit.message, .author.login, .commit.author.date' | (
+echo ${ALL_COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.author.date' | (
     while read message; 
     do
         out_message="* "$message
