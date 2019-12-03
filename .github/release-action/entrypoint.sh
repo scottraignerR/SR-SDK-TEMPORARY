@@ -19,16 +19,25 @@ echo "## What's changed " >> ${FILENAME}
 echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
-# IFS=$'\n'
-# for item in $(echo ${COMMITS} | jq -r '.[]')
-# do
-#     MESSAGE=$(jq -r '.commit.message')
-#     AUTHOR=$(jq -r '.author.login')
-#     echo -n '* ' >> ${FILENAME}
-#     echo -n ${MESSAGE//[$'\t\r\n']} >> ${FILENAME}
-#     echo "@"${AUTHOR//[$'\t\r\n']} >> ${FILENAME}
-# done
-echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
+IFS=$''
+echo ${ALL_COMMITS} | ./jq-osx-amd64_1_5 -r '.[] | .commit.message, .author.login, .commit.author.date' | (
+    while read message; 
+    do
+        out_message="* "$message
+        read login
+        if [ ! -z "$login" ]; then
+            out_message+=" @"$login
+            read date
+            if [ ! -z "$date" ]; then
+                out_message+=" "$date
+            fi
+        fi
+        echo $out_message >> ${FILENAME}
+    done
+)
+
+# one line, ugly solution. Not ideal
+# echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
 
 echo "* JUNK: Update release-drafter.yml (#85) @MikeHamilton-RW" >> $FILENAME
 echo "* Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW" >> $FILENAME
