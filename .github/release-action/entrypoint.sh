@@ -7,6 +7,7 @@ RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/
 LAST_COMMMIT=$(echo $RESULT | jq -r '.target_commitish')
 LAST_RELEASE_DATE=$(echo $RESULT | jq -r '.created_at')
 
+set -x
 # GET ALL COMMITS FROM LAST RELEASE UP TO CURRENT
 # COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/compare/${LAST_COMMMIT}...${COMMIT_SHA}")
 # For this way, use .basecommit.commit.message instead of simply .commit.message
@@ -18,7 +19,6 @@ echo "" >> ${FILENAME}
 echo "## What's changed " >> ${FILENAME}
 echo "" >> ${FILENAME}
 
-set -x
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
 IFS=$''
 echo ${ALL_COMMITS} | jq -r '.[] | .commit.message, .author.login, .commit.author.date' | (
