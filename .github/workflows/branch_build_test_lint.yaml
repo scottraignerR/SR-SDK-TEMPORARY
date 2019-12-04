@@ -9,13 +9,6 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: Go through Greg's release steps to determine if there is any additional functionality needed at this time.
-# TODO: Ensure all five yaml files are performing the same required steps.
-# TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
-# TODO: Email out release notes when a release is created.
-        # https://github.com/bitoiu/release-notify-action
-# TODO: Push a comment to Jira?
-        # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
@@ -31,6 +24,19 @@ on:
                               # Digest algorithm: SHA-256
                               # Signature algorithm: SHA256withRSA, 2048-bit key
         # https://developer.android.com/studio/build/building-cmdline
+# TODO: Ensure all five yaml files are performing the same required steps.
+# TODO: Greg's notes:
+        # Retrieve translation differences and post them in release notes via "git log --grep Weblate etc." At least list the affected languages? Per repo? 
+        # For total release package, need to have all apks unzip to same folder per Greg: https://realwear.atlassian.net/wiki/spaces/RSE/pages/420380780/Zip+File+Reference+for+Release+Collection
+# TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
+        # https://github.com/vijaykramesh/pr-lint-action
+        # Request from Kieren, what is the exact use case?
+# TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
+# TODO: Email out release notes when a release is created.
+        # Existing GitHub Actions are V1, not V2 compatible. Would need a custom solution.
+# TODO: Push a comment to Jira?
+        # What's the use case?
+        # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
         # BLOCKED, no idea how to do this just yet.
 # TODO: Incorporate actions/cache (Scott working on it)
@@ -38,8 +44,6 @@ on:
 # TODO: Incorporate and test cron schedule. NOT WORKING?
 # TODO: Auto check for gradle updates?
         # https://github.com/MeilCli/gradle-update-check-action
-# TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
-        # https://github.com/vijaykramesh/pr-lint-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
