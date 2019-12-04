@@ -9,6 +9,7 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Create release repo to hold no source code, but only the collection of apks in a zip file in a release.
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
