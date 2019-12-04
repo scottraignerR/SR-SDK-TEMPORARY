@@ -49,8 +49,6 @@ on:
         # Create a custom github action similar to release-action, but using sonarqube.
         # OR incorporate gradle plugin, so devs will have visibility when they build locally? Hmmm. Probably not since they won't have it installed....
         # https://hub.docker.com/_/sonarqube
-# TODO: Incorporate Probot to auto-delete branches?
-        # https://probot.github.io/apps/delete-merged-branch/
 # TODO: Semantic pull requests, must have specific title in order to be merged
         # Will this assist us in the future?
         # https://probot.github.io/apps/semantic-pull-requests/
