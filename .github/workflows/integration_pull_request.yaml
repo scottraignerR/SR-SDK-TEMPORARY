@@ -24,12 +24,13 @@ jobs:
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
     
-    - name: Example PR comment 1
-      uses: unsplash/comment-on-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        msg: "Check out this message! (unsplash/comment-on-pr@master)"
+# ERROR: Couldn't find an open pull request for branch with head at .
+#     - name: Example PR comment 1
+#       uses: unsplash/comment-on-pr@master
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         msg: "Check out this message! (unsplash/comment-on-pr@master)"
           
     - name: Example PR comment 2
       uses: thollander/actions-comment-pull-request@master
