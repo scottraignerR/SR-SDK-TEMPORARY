@@ -40,11 +40,15 @@ jobs:
     - name: Echo android application/library version
       run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER
     
+    - name: Set the four digit version
+      run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      id: version_build_output
+    
     - name: Post version and build number to Pull Request as a comment
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-          "Version and build: **v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}**"
+          Version and build: **v${{ steps.version_build_output.outputs.version_build }}**
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-repeats: false
 
