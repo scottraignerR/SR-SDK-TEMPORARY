@@ -9,9 +9,12 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
-# TODO: Edit body of the release to include more info possibly?
-        # Still deciding on which release actions will be the best to use with release notes.
-        # Create realse, push aar/apk, push release notes?
+# TODO: Output build number as a comment to each PR? 
+        # https://github.com/unsplash/comment-on-pr
+# TODO: Email out release notes when a release is created.
+        # https://github.com/bitoiu/release-notify-action
+# TODO: Push a comment to Jira?
+        # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
@@ -32,12 +35,8 @@ on:
 # TODO: Incorporate actions/cache (Scott working on it)
         # https://github.com/actions/cache
 # TODO: Incorporate and test cron schedule. NOT WORKING?
-# TODO: Output build number as a comment to each PR? 
-        # https://github.com/unsplash/comment-on-pr
 # TODO: Auto check for gradle updates?
         # https://github.com/MeilCli/gradle-update-check-action
-# TODO: Email out release notes when a release is created.
-        # https://github.com/bitoiu/release-notify-action
 # TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
         # https://github.com/vijaykramesh/pr-lint-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
@@ -48,8 +47,6 @@ on:
         # Create a custom github action similar to release-action, but using sonarqube.
         # OR incorporate gradle plugin, so devs will have visibility when they build locally? Hmmm. Probably not since they won't have it installed....
         # https://hub.docker.com/_/sonarqube
-# TODO: Push a comment to Jira?
-        # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Incorporate Probot to auto-delete branches?
         # https://probot.github.io/apps/delete-merged-branch/
 # TODO: Semantic pull requests, must have specific title in order to be merged
