@@ -23,27 +23,16 @@ IFS=$''
 echo ${COMMITS} | jq '.[] | .commit.message, .sha, .html_url, .author.login, .commit.author.date' | (
     while read message; 
     do
-#         out_message="* "$message
-#         read login
-#         if [ ! -z "$login" ]; then
-#             out_message+=" @"$login
-#             read date
-#             if [ ! -z "$date" ]; then
-#                 out_message+=" "$date
-#             fi
-#         fi
-#         echo $out_message >> ${FILENAME}
-        
-        out_message="* "$message | tr -d '"'
+        out_message=$(echo "* "$message | tr -d '"')
         read sha
         read html_url
-        out_message+=" [${sha:0:8}]($html_url)" | tr -d '"'
+        out_message+=$(echo " [${sha:0:8}]($html_url)" | tr -d '"')
         read login
         if [ ! -z "$login" ]; then
-            out_message+=" @"$login | tr -d '"'
+            out_message+=$(echo " @"$login | tr -d '"')
             read date
             if [ ! -z "$date" ]; then
-                out_message+=" "$date | tr -d '"'
+                out_message+=$(echo " "$date | tr -d '"')
             fi
         fi
         echo $out_message >> ${FILENAME}
