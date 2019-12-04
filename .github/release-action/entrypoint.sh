@@ -37,13 +37,13 @@ echo ${COMMITS} | jq '.[] | .commit.message, .sha, .html_url, .author.login, .co
         out_message="* "$message | tr -d '"'
         read sha
         read html_url
-        out_message=" [${sha:0:8}]($html_url)" | tr -d '"'
+        out_message+=" [${sha:0:8}]($html_url)" | tr -d '"'
         read login
         if [ ! -z "$login" ]; then
-            out_message=" @"$login | tr -d '"'
+            out_message+=" @"$login | tr -d '"'
             read date
             if [ ! -z "$date" ]; then
-                out_message=" "$date | tr -d '"'
+                out_message+=" "$date | tr -d '"'
             fi
         fi
         echo $out_message >> ${FILENAME}
