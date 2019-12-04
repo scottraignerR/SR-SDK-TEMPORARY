@@ -44,7 +44,7 @@ jobs:
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-          Version and build: **v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}**
+          'Version and build: **v${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}.${BUILD_NUMBER}**'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-repeats: false
 
