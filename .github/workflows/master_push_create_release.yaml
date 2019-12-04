@@ -72,11 +72,6 @@ jobs:
     - name: Set the commit sha output for usage by release creation
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
       id: commit_sha_step
-  
-#     - name: Create draft release notes
-#       uses: toolmantim/release-drafter@v5.2.0
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Github Release
       uses: ./.github/release-action
@@ -90,27 +85,3 @@ jobs:
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
-
-
-    # Testing, but would need a way to collect release notes
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-    #   with:
-    #     tag_name: ${{ steps.version_build_output.outputs.version_build }}
-    #     release_name: ${{ steps.version_build_output.outputs.version_build }}
-    #     body: |
-    #       ## What’s Changed
-    #       |
-    #       * Update release-drafter.yml (#86) @MikeHamilton-RW
-    #       * Update release-drafter.yml (#85) @MikeHamilton-RW
-    #       * Update and rename release-drafter.yaml to release-drafter.yml (#84) @MikeHamilton-RW
-    #       * Update release-drafter.yaml (#83) @MikeHamilton-RW
-    #       * Update branch_build_test_lint.yaml (#82) @MikeHamilton-RW
-    #       * Update release-drafter.yaml (#81) @MikeHamilton-RW
-    #       * merge to master (#80) @MikeHamilton-RW
-    #       * Optimize action workflow (#79) @MikeHamilton-RW
-    #     draft: false
-    #     prerelease: false

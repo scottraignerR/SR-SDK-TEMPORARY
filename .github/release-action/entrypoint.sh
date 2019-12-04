@@ -15,7 +15,7 @@ COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com
 FILENAME=release_notes.txt
 echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
 echo "" >> ${FILENAME}
-echo "## What's changed since the last release on $LAST_RELEASE_DATE" >> ${FILENAME}
+echo "## What's changed since the last release on $LAST_RELEASE_DATE from commit $LAST_COMMMIT" >> ${FILENAME}
 echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
