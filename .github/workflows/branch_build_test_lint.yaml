@@ -9,6 +9,7 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Go through Greg's release steps to determine if there is any additional functionality needed at this time.
 # TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Email out release notes when a release is created.
         # https://github.com/bitoiu/release-notify-action
