@@ -16,8 +16,8 @@ FILENAME=release_notes.txt
 echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
 echo "" >> ${FILENAME}
 echo "## What's changed since the last release:" >> ${FILENAME}
-echo "\# Last release date: $LAST_RELEASE_DATE" >> ${FILENAME}
-echo "\# Last release commit: $LAST_COMMMIT" >> ${FILENAME}
+echo "#### Last release date: $LAST_RELEASE_DATE" >> ${FILENAME}
+echo "#### Last release commit: $LAST_COMMMIT" >> ${FILENAME}
 echo "" >> ${FILENAME}
 
 # CAPTURE ALL MESSAGES FROM ALL COMMITS
