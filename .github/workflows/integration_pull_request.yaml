@@ -23,7 +23,30 @@ jobs:
 
     - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
-
+    
+    - name: Example PR comment 1
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: "Check out this message! (unsplash/comment-on-pr@master)"
+          
+    - name: Example PR comment 2
+      uses: thollander/actions-comment-pull-request@master
+      with:
+        message: 'Example of message! (thollander/actions-comment-pull-request@master)'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Example PR comment 3
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          **Hello** (mshick/add-pr-comment@v1)
+          🌏
+          !
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-repeats: false
+      
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
 
