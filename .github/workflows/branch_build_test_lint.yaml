@@ -38,7 +38,9 @@ on:
         # What's the use case?
         # https://github.com/marketplace/actions/jira-add-comment
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
-        # BLOCKED, no idea how to do this just yet.
+        # WAS BLOCKED, no idea how to do this just yet, need to try method below.
+        # aapt dump badging /path/to/apk | grep -c application-debuggable from:
+        # https://stackoverflow.com/questions/7085644/how-to-check-if-apk-is-signed-or-debug-build
 # TODO: Incorporate actions/cache (Scott working on it)
         # https://github.com/actions/cache
 # TODO: Incorporate and test cron schedule. NOT WORKING?
