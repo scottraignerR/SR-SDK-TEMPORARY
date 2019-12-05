@@ -49,9 +49,11 @@ on:
 # TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Email out release notes when a release is created.
         # Existing GitHub Actions are V1, not V2 compatible. Would need a custom solution.
-# TODO: Push a comment to Jira?
-        # What's the use case?
-        # https://github.com/marketplace/actions/jira-add-comment
+# TODO: Jira and GitHub Actions
+        # Action must login to Jira: https://github.com/marketplace/actions/jira-login
+        # Action can create a ticket: https://github.com/marketplace/actions/jira-create-issue
+        # Action can create a comment: https://github.com/marketplace/actions/jira-add-comment
+        # Action can transition a ticket: https://github.com/marketplace/actions/jira-issue-transition
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
         # WAS BLOCKED, no idea how to do this just yet, need to try method below.
         # aapt dump badging /path/to/apk | grep -c application-debuggable from:
