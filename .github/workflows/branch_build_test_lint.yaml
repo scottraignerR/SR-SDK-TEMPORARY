@@ -9,13 +9,24 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Cross repo builds
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#external-events-repository_dispatch
+        # Hard way to send repository_dispatch(Use Action below instead): https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30668#M503
+        # Scenario 1: Change pushed to WN-About. WN-About uses the action https://github.com/actions/checkout to checkout the SDK and builds.
+        # Scenario 2: Change pushed to WN-SDK. WN-SDK has https://github.com/defold/repository-dispatch event trigger that fires in Int-PR, Int-Merge, Mas-PR, and Mas-Merge actions,
+            # so regardless of where WN-SDK changes in only integration or master, we trip this event dispatch. We unfortunately have to trip it two times for each repository
+            # that is dependent on WN-SDK, one for each of the Int-Merge, Mas-Merge actions in the WN-About repo for example.
+        # Need to test, hopefully don't have issues like this: https://github.community/t5/GitHub-Actions/repository-dispatch-not-triggering-actions/m-p/33845#M1677
+# TODO: Push a package to GitHub Packages (needs much more testing).
+        # Figure out how to delete previous packages in WN-SDK repo.
 # TODO: Create release repo to hold no source code, but only the collection of apks in a zip file in a release.
 # TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
         # https://developer.android.com/studio/build/building-cmdline
-# TODO: Need to sign the Release build, then push.
+# TODO: Need to sign the Release build
         # https://github.com/marketplace/actions/sign-android-release\
+        # https://developer.android.com/training/articles/keystore
         # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
         # javaExe.toString(), "-jar", apkSigner.toString(), "-w", pemFile.toString(), pk8File.toString(), apk.getAbsolutePath(), outputFile.toString());
         # https://developer.android.com/studio/build/building-cmdline
@@ -29,6 +40,7 @@ on:
 # TODO: Greg's notes:
         # Retrieve translation differences and post them in release notes via "git log --grep Weblate etc." At least list the affected languages? Per repo? 
         # For total release package, need to have all apks unzip to same folder per Greg: https://realwear.atlassian.net/wiki/spaces/RSE/pages/420380780/Zip+File+Reference+for+Release+Collection
+        # He would like the same format, such as the old method: "5 weeks ago 2019-10-16 13:54:46 +0100  Douglas Mearns HMT-3083 - fix of bug accidently introduced."
 # TODO: Pull Request lint, verify the PR name or comments contains "HMT-xxxx"
         # https://github.com/vijaykramesh/pr-lint-action
         # Request from Kieren, what is the exact use case?
