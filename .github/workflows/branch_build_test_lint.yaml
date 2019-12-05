@@ -24,10 +24,9 @@ on:
         # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
         # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
         # https://developer.android.com/studio/build/building-cmdline
-# TODO: Need to sign the Release build, then push.
+# TODO: Need to sign the Release build
         # https://github.com/marketplace/actions/sign-android-release\
         # https://developer.android.com/training/articles/keystore
-        # 
         # http://www.londatiga.net/it/how-to-sign-apk-zip-files/
         # javaExe.toString(), "-jar", apkSigner.toString(), "-w", pemFile.toString(), pk8File.toString(), apk.getAbsolutePath(), outputFile.toString());
         # https://developer.android.com/studio/build/building-cmdline
