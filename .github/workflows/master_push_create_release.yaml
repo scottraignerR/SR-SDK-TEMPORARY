@@ -63,7 +63,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: ${{ steps.repo_name_output.outputs.repo_name }}
+        name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
         path: sdk/build/outputs/aar
     
 # ALL REMAINING STEPS ARE ONLY FOR CREATING AND POSTING THE RELEASE
