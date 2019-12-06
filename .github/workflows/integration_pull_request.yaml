@@ -101,7 +101,11 @@ jobs:
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-          **Successfully built and tested ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}**
+          Build successful for Pull Request into ${{ steps.branch_name_output.outputs.branch_base_name }} 
+          from branch "${{ steps.branch_name_output.outputs.branch_head_name }}" 
+          submitted for ${{ github.repository }} 
+          Version v${{ steps.version_build_output.outputs.version_build }}
+          submitted by ${{ github.actor }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-repeats: false
 
