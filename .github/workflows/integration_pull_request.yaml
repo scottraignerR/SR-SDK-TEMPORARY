@@ -77,6 +77,20 @@ jobs:
         name: WN-SDK
         path: sdk/build/outputs/aar
 
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Comment on issue
+      uses: atlassian/gajira-comment@master
+      with:
+        issue: IN-10 # ${{ github.ref??? Maybe head or ref }} # The branch name should correlate with issue in Jira
+        comment: |
+          Pull Request to integration submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+
   IntegrationPullRequestLint:
 
     runs-on: ubuntu-latest
