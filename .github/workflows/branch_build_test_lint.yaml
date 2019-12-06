@@ -69,6 +69,7 @@ on:
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
+        # https://android.googlesource.com/platform/external/adt-infra/+/958180293308f4be67f6369acb075503f84a08b1/emu-image/external/
 # TODO LONG TERM: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Incorporate SonarQube?
         # Must download and install, so more than likely need to Dockerize it.
@@ -170,7 +171,9 @@ jobs:
       with:
         issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
         comment: |
-          Build successful for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+          Build successful for ${{ github.repository }} 
+          v${{ steps.version_build_output.outputs.version_build }} 
+          from branch ${{ steps.branch_name_output.outputs.branch_name }}
 
   BranchLint:
 
