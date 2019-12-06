@@ -175,7 +175,7 @@ jobs:
           Build successful for ${{ github.repository }} 
           Version v${{ steps.version_build_output.outputs.version_build }} 
           from branch "${{ steps.branch_name_output.outputs.branch_name }}"
-          submitted by ${{ GITHUB_ACTOR }}
+          submitted by ${{ github.actor }}
 
   BranchLint:
 

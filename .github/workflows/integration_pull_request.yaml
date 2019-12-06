@@ -94,7 +94,7 @@ jobs:
           from branch "${{ steps.branch_name_output.outputs.branch_head_name }}" 
           submitted for ${{ github.repository }} 
           Version v${{ steps.version_build_output.outputs.version_build }}
-          submitted by ${{ GITHUB_ACTOR }}
+          submitted by ${{ github.actor }}
 
     # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment
