@@ -65,7 +65,7 @@ jobs:
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
-      
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
@@ -90,7 +90,11 @@ jobs:
       with:
         issue: ${{ steps.branch_name_output.outputs.branch_head_name }} # The branch name should correlate with issue in Jira
         comment: |
-          Pull Request into ${{ steps.branch_name_output.outputs.branch_base_name }} from branch "${{ steps.branch_name_output.outputs.branch_head_name }}" submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+          Pull Request into ${{ steps.branch_name_output.outputs.branch_base_name }} 
+          from branch "${{ steps.branch_name_output.outputs.branch_head_name }}" 
+          submitted for ${{ github.repository }} 
+          Version v${{ steps.version_build_output.outputs.version_build }}
+          submitted by ${{ GITHUB_ACTOR }}
 
     # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment

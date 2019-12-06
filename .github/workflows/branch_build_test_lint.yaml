@@ -6,6 +6,7 @@ on:
       - master
       - integration
 
+# Would be used only for Integration and Master branch building.
   # schedule:
     # - cron: 5 * * * *
 
@@ -172,8 +173,9 @@ jobs:
         issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
         comment: |
           Build successful for ${{ github.repository }} 
-          v${{ steps.version_build_output.outputs.version_build }} 
-          from branch ${{ steps.branch_name_output.outputs.branch_name }}
+          Version v${{ steps.version_build_output.outputs.version_build }} 
+          from branch "${{ steps.branch_name_output.outputs.branch_name }}"
+          submitted by ${{ GITHUB_ACTOR }}
 
   BranchLint:
 
