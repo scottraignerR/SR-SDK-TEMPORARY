@@ -57,7 +57,7 @@ jobs:
       run: ./gradlew testReleaseUnitTest
 
     - name: Ouput repository name without owner as variable
-      run: echo "##[set-output name=repo_name;]${github.repository#realwear/}"
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
 
     - name: Upload artifact
