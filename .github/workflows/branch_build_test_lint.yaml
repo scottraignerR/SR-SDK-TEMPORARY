@@ -6,9 +6,11 @@ on:
       - master
       - integration
 
+# Would be used only for Integration and Master branch building.
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Get branch name: ${GITHUB_REF#refs/heads/} or ${GITHUB_REF##*/}
 # TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
             # make is easier to identify which repo(s) is affected?
 # TODO: Cross repo builds
@@ -68,6 +70,7 @@ on:
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
+        # https://android.googlesource.com/platform/external/adt-infra/+/958180293308f4be67f6369acb075503f84a08b1/emu-image/external/
 # TODO LONG TERM: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Incorporate SonarQube?
         # Must download and install, so more than likely need to Dockerize it.
@@ -140,10 +143,14 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Ouput repository name without owner as variable
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      id: repo_name_output
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK
+        name: ${{ steps.repo_name_output.outputs.repo_name }}
         path: sdk/build/outputs/aar
 
     - name: Login
@@ -153,12 +160,20 @@ jobs:
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
+    # Export branch name as outputs
+    - name: Set branch as environment variable
+      run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
+      id: branch_name_output
+
     - name: Comment on issue
       uses: atlassian/gajira-comment@master
       with:
-        issue: IN-10 # ${{ github.ref }} # The branch name should correlate with issue in Jira
+        issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
         comment: |
-          Build successful for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+          Build successful for ${{ github.repository }} 
+          version v${{ steps.version_build_output.outputs.version_build }} 
+          from branch "${{ steps.branch_name_output.outputs.branch_name }}"
+          submitted by ${{ github.actor }}
 
   BranchLint:
 
