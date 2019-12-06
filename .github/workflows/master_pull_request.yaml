@@ -37,18 +37,19 @@ jobs:
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
 
-    - name: Echo android application/library version
-      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
+
+    - name: Echo the four digit version
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
     
+      # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-          Version and build: **v${{ steps.version_build_output.outputs.version_build }}**
+          **Building application v${{ steps.version_build_output.outputs.version_build }}**
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-repeats: false
 
