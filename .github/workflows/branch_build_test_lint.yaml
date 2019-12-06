@@ -171,7 +171,7 @@ jobs:
         issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
         comment: |
           Build successful for ${{ github.repository }} 
-          Version v${{ steps.version_build_output.outputs.version_build }} 
+          version v${{ steps.version_build_output.outputs.version_build }} 
           from branch "${{ steps.branch_name_output.outputs.branch_name }}"
           submitted by ${{ github.actor }}
 
