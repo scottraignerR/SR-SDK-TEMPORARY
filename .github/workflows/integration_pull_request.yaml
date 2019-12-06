@@ -83,12 +83,13 @@ jobs:
       run: echo "##[set-output name=branch_name;]${GITHUB_HEAD_REF}"
       id: branch_name_output
 
+# TODO: Branch name in comment puts link to entire issue in Jira, hmmmm....
     - name: Comment on issue
       uses: atlassian/gajira-comment@master
       with:
         issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
         comment: |
-          Pull Request to integration from branch ${{ steps.branch_name_output.outputs.branch_name }} submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+          Pull Request to integration from branch "${{ steps.branch_name_output.outputs.branch_name }}"" submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
 
     # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment
