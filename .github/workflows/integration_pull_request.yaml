@@ -78,17 +78,17 @@ jobs:
     - name: Echo branches for testing
       run: echo "ref ${GITHUB_REF}, head ${GITHUB_HEAD_REF}, base ${GITHUB_BASE_REF}"
 
-# EXPORT BRANCH AS OUTPUT
-    # - name: Set branch as environment variable
-    #   run: echo "##[set-output name=branch_name;]${GITHUB_REF##*/}"
-    #   id: branch_name_output
+    # Export branch name as output
+    - name: Set branch as environment variable
+      run: echo "##[set-output name=branch_name;]${GITHUB_HEAD_REF}"
+      id: branch_name_output
 
-    # - name: Comment on issue
-    #   uses: atlassian/gajira-comment@master
-    #   with:
-    #     issue: ${{ steps.branch_name_output.outputs.branch_name }} # ${GITHUB_REF##*/} # ${{ github.ref??? Maybe head or ref }} # The branch name should correlate with issue in Jira
-    #     comment: |
-    #       Pull Request to integration from branch ${{ steps.branch_name_output.outputs.branch_name }} submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
+    - name: Comment on issue
+      uses: atlassian/gajira-comment@master
+      with:
+        issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
+        comment: |
+          Pull Request to integration from branch ${{ steps.branch_name_output.outputs.branch_name }} submitted for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
 
     # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment

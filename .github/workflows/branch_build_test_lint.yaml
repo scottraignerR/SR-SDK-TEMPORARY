@@ -157,7 +157,7 @@ jobs:
     - name: Comment on issue
       uses: atlassian/gajira-comment@master
       with:
-        issue: IN-10 # ${{ github.ref }} # The branch name should correlate with issue in Jira
+        issue: IN-10 # The branch name should correlate with issue in Jira
         comment: |
           Build successful for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
 
