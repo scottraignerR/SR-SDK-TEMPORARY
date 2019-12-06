@@ -144,7 +144,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK
+        name: ${{ github.repository }}
         path: sdk/build/outputs/aar
 
     - name: Login
