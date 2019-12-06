@@ -115,8 +115,12 @@ jobs:
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
 
-    - name: Echo android application/library version
-      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
+    - name: Set the four digit version
+      run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      id: version_build_output
+    
+    - name: Echo the four digit version
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -141,6 +145,20 @@ jobs:
       with:
         name: WN-SDK
         path: sdk/build/outputs/aar
+
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Comment on issue
+      uses: atlassian/gajira-comment@master
+      with:
+        issue: IN-10 # ${{ github.ref }} # The branch name should correlate with issue in Jira
+        comment: |
+          Build successful for ${{ github.repository }} v${{ steps.version_build_output.outputs.version_build }}
 
   BranchLint:
 
