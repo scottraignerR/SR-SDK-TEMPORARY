@@ -9,6 +9,7 @@ on:
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Get branch name: ${GITHUB_REF#refs/heads/} or ${GITHUB_REF##*/}
 # TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
             # make is easier to identify which repo(s) is affected?
 # TODO: Cross repo builds

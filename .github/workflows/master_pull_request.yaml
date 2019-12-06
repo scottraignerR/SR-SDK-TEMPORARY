@@ -43,15 +43,6 @@ jobs:
 
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
-    
-      # For Pull Requests only
-    - name: Post version and build number to Pull Request as a comment
-      uses: mshick/add-pr-comment@v1
-      with:
-        message: |
-          **Building application v${{ steps.version_build_output.outputs.version_build }}**
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        allow-repeats: false
 
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -76,6 +67,15 @@ jobs:
       with:
         name: WN-SDK
         path: sdk/build/outputs/aar
+
+      # For Pull Requests only
+    - name: Post version and build number to Pull Request as a comment
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          **Building application v${{ steps.version_build_output.outputs.version_build }}**
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-repeats: false
 
   MasterPullRequestLint:
 
