@@ -39,7 +39,6 @@ on:
                               # Digest algorithm: SHA-256
                               # Signature algorithm: SHA256withRSA, 2048-bit key
         # https://developer.android.com/studio/build/building-cmdline
-# TODO: Ensure all five yaml files are performing the same required steps.
 # TODO: Greg's notes:
         # Retrieve translation differences and post them in release notes via "git log --grep Weblate etc." At least list the affected languages? Per repo? 
         # For total release package, need to have all apks unzip to same folder per Greg: https://realwear.atlassian.net/wiki/spaces/RSE/pages/420380780/Zip+File+Reference+for+Release+Collection
@@ -50,13 +49,6 @@ on:
 # TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Email out release notes when a release is created.
         # Existing GitHub Actions are V1, not V2 compatible. Would need a custom solution.
-# TODO: Jira and GitHub Actions
-        # Action must login to Jira: https://github.com/marketplace/actions/jira-login
-        # Action can create a ticket: https://github.com/marketplace/actions/jira-create-issue
-        # Action can create a comment: https://github.com/marketplace/actions/jira-add-comment
-        # Action can transition a ticket: https://github.com/marketplace/actions/jira-issue-transition
-            # Need more testing: "transition: "Started" # Must use transition name, not next state name." Notes from initial testing.
-            # Verify that this is the case, because the HMT project uses ONLY states, not transitions.
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
         # WAS BLOCKED, no idea how to do this just yet, need to try method below.
         # aapt dump badging /path/to/apk | grep -c application-debuggable from:
