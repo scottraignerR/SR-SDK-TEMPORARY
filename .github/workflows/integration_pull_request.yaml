@@ -75,16 +75,12 @@ jobs:
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-    - name: Echo branches for testing
-      run: echo "ref ${GITHUB_REF}, head ${GITHUB_HEAD_REF}, base ${GITHUB_BASE_REF}"
-
-    # Export branch name as output
+    # Export branch names as outputs
     - name: Set branch as environment variable
       run: echo "##[set-output name=branch_head_name;]${GITHUB_HEAD_REF}" &&
         echo "##[set-output name=branch_base_name;]${GITHUB_BASE_REF}"
       id: branch_name_output
 
-# TODO: Branch name in comment puts link to entire issue in Jira, hmmmm....
     - name: Comment on issue
       uses: atlassian/gajira-comment@master
       with:
