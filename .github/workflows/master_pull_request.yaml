@@ -37,20 +37,12 @@ jobs:
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
 
-    - name: Echo android application/library version
-      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
-    
-    - name: Post version and build number to Pull Request as a comment
-      uses: mshick/add-pr-comment@v1
-      with:
-        message: |
-          Version and build: **v${{ steps.version_build_output.outputs.version_build }}**
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        allow-repeats: false
+
+    - name: Echo the four digit version
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -70,11 +62,24 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Ouput repository name without owner as variable
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      id: repo_name_output
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK
+        name: ${{ steps.repo_name_output.outputs.repo_name }}
         path: sdk/build/outputs/aar
+
+      # For Pull Requests only
+    - name: Post version and build number to Pull Request as a comment
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          **Building application v${{ steps.version_build_output.outputs.version_build }}**
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-repeats: false
 
   MasterPullRequestLint:
 

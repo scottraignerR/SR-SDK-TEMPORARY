@@ -6,9 +6,13 @@ on:
       - master
       - integration
 
+# Would be used only for Integration and Master branch building.
   # schedule:
     # - cron: 5 * * * *
 
+# TODO: Get branch name: ${GITHUB_REF#refs/heads/} or ${GITHUB_REF##*/}
+# TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
+            # make is easier to identify which repo(s) is affected?
 # TODO: Cross repo builds
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#external-events-repository_dispatch
         # Hard way to send repository_dispatch(Use Action below instead): https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30668#M503
@@ -47,9 +51,13 @@ on:
 # TODO: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Email out release notes when a release is created.
         # Existing GitHub Actions are V1, not V2 compatible. Would need a custom solution.
-# TODO: Push a comment to Jira?
-        # What's the use case?
-        # https://github.com/marketplace/actions/jira-add-comment
+# TODO: Jira and GitHub Actions
+        # Action must login to Jira: https://github.com/marketplace/actions/jira-login
+        # Action can create a ticket: https://github.com/marketplace/actions/jira-create-issue
+        # Action can create a comment: https://github.com/marketplace/actions/jira-add-comment
+        # Action can transition a ticket: https://github.com/marketplace/actions/jira-issue-transition
+            # Need more testing: "transition: "Started" # Must use transition name, not next state name." Notes from initial testing.
+            # Verify that this is the case, because the HMT project uses ONLY states, not transitions.
 # TODO: Verify final artifact pushed to release is indeed "release" and NOT "debug". How can we determine the difference?
         # WAS BLOCKED, no idea how to do this just yet, need to try method below.
         # aapt dump badging /path/to/apk | grep -c application-debuggable from:
@@ -62,6 +70,7 @@ on:
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
+        # https://android.googlesource.com/platform/external/adt-infra/+/958180293308f4be67f6369acb075503f84a08b1/emu-image/external/
 # TODO LONG TERM: Create an action that counts numbers of tests before and after, send message if number did not increase.
 # TODO: Incorporate SonarQube?
         # Must download and install, so more than likely need to Dockerize it.
@@ -109,8 +118,12 @@ jobs:
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
 
-    - name: Echo android application/library version
-      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
+    - name: Set the four digit version
+      run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      id: version_build_output
+    
+    - name: Echo the four digit version
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
     - name: Set gradle version to 6.0
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -130,11 +143,38 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Ouput repository name without owner as variable
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      id: repo_name_output
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK
+        name: ${{ steps.repo_name_output.outputs.repo_name }}
         path: sdk/build/outputs/aar
+
+    - name: Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Set branch as environment variable
+      run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
+      id: branch_name_output
+
+      # TODO: Need to handle the failure. How?
+    - name: Comment on issue
+      uses: atlassian/gajira-comment@master
+      continue-on-error: true # Continue in case Jira issue does not exist for this branch name
+      with:
+        issue: ${{ steps.branch_name_output.outputs.branch_name }} # The branch name should correlate with issue in Jira
+        comment: |
+          Build successful for ${{ github.repository }} 
+          version v${{ steps.version_build_output.outputs.version_build }} 
+          from branch "${{ steps.branch_name_output.outputs.branch_name }}"
+          submitted by ${{ github.actor }}
 
   BranchLint:
 

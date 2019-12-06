@@ -37,15 +37,12 @@ jobs:
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
 
-    - name: Echo android application/library version
-      run: echo "Application version v"$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION
-
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
     
     - name: Echo the four digit version
-      run: echo ${{ steps.version_build_output.outputs.version_build }}
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
       
     - name: Set gradle version
       run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
@@ -59,12 +56,18 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Ouput repository name without owner as variable
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      id: repo_name_output
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
-        name: WN-SDK
+        name: ${{ steps.repo_name_output.outputs.repo_name }}
         path: sdk/build/outputs/aar
     
+# ALL REMAINING STEPS ARE ONLY FOR CREATING AND POSTING THE RELEASE
+    # echo build number as an output, not just a variable. 
     - name: Set the build number output
       run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
       id: build_package_step
@@ -81,7 +84,7 @@ jobs:
        APP_FOLDER: sdk
        BUILD_CONFIG: debug # For now. Will need to be 'release' after we sign the apks
        OUTPUT_TYPE: aar # Will be 'apk' for other projects
-       RELEASE_TITLE: WN-SDK
+       RELEASE_TITLE: ${{ steps.repo_name_output.outputs.repo_name }}
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        BUILD_NUMBER: ${{ steps.build_package_step.outputs.build_number }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
