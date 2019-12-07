@@ -80,6 +80,7 @@ on:
         # https://github.com/wagoid/commitlint-github-action
 # TODO: # Post build badge to PR comment and Jira comment
 
+
 jobs:
 
   BranchBuildAndTest:
