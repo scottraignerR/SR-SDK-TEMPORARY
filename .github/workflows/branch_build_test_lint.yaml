@@ -78,6 +78,7 @@ on:
 # TODO LONG TERM: Add lint to pull requests
         # https://github.com/seferov/pr-lint-action
         # https://github.com/wagoid/commitlint-github-action
+# TODO: # Post build badge to PR comment and Jira comment
 
 jobs:
 
