@@ -79,7 +79,18 @@ on:
         # https://github.com/seferov/pr-lint-action
         # https://github.com/wagoid/commitlint-github-action
 # TODO: # Post build badge to PR comment and Jira comment
-
+# TODO: # Random features to investigate:
+          # https://dependabot.com/blog/hello-github/
+          # https://github.com/benjefferies/branch-protection-bot
+          # https://github.com/steebchen/kubectl
+          # https://fabianmoronzirfas.me/tech/2019/02/06/cross-repo-github-action-triggering.html
+          # https://github.com/defold/repository-dispatch
+          # https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30688#M512
+          # https://github.community/t5/GitHub-Actions/GitHub-Actions-Manual-Trigger-Approvals/m-p/31504
+          # Microsoft Teams 
+            # https://techcommunity.microsoft.com/t5/Microsoft-Teams-Blog/GitHub-Code-better-together-with-GitHub-and-Microsoft-Teams/ba-p/659444
+            # https://docs.microsoft.com/en-us/connectors/github/
+            # https://zapier.com/apps/github/integrations/microsoft-teams          
 
 jobs:
 
