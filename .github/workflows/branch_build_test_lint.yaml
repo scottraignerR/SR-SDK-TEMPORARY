@@ -35,6 +35,7 @@ on:
         # apksigner sign --ks my-release-key.jks --out my-app-release.apk my-app-unsigned-aligned.apk FOR APP KEYS
         # https://developer.android.com/studio/build/building-cmdline
         # QUESTION: Which apps needs system key and which only need app key?
+        # WILL BE WRITING CUSTOM NON-OPEN SOURCE VERSION USING DOCKER, BASED ON: https://github.com/marketplace/actions/sign-android-release\
 # TODO: Add jarsigner to verify what key signed the app. 
         # $ "jarsigner -verify -verbose -certs app.apk"
         # Result should be: - Signed by "EMAILADDRESS=info@realwear.com, OU=Software, O=RealWear Inc, L=Milpitas, ST=California, C=US"
