@@ -76,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
-        path: "**/build/outputs/aar"
+        path: sdk/build/outputs/aar
 
     - name: Login
       uses: atlassian/gajira-login@master
