@@ -62,7 +62,7 @@ jobs:
 
     - name: List artifacts
       run:  |
-        ls -al sdk/build/outputs/*
+        ls -al **/build/outputs/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
