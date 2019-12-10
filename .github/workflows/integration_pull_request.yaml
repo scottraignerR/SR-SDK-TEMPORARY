@@ -36,7 +36,7 @@ jobs:
       run: echo "::set-env name=MAJOR_VERSION::$(cat build.gradle | grep 'majorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=MINOR_VERSION::$(cat build.gradle | grep 'minorVersion = ' | awk '{print $3}')" &&
         echo "::set-env name=PATCH_VERSION::$(cat build.gradle | grep 'patchVersion = ' | awk '{print $3}')"
-    
+
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
@@ -62,12 +62,13 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
-    - name: List artifacts
-      run:  ls -al sdk/build/outputs/*
-
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
+
+    - name: List artifacts
+      run:  |
+        ls -al sdk/build/outputs/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master

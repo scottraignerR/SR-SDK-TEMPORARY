@@ -1,4 +1,6 @@
 
+# TODO: Add list of requirements, so when incorporating into a new repo, we know exactly what
+        # to look for and check off.
 # TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
             # make is easier to identify which repo(s) is affected?
 # TODO: Cross repo builds
