@@ -1,9 +1,9 @@
 name: "APK Publisher"
-description: "Build & Publish APK on Github"
+description: "Publish Release on Github"
 author: "MikeHamilton-RW"
 inputs:
   GITHUB_TOKEN:
-    description: "Github secret token to allow automated publishing of APK to release."
+    description: "Github secret token to allow automated publishing of artifacts to a release."
 runs:
   using: "docker"
   image: "Dockerfile"
