@@ -6,10 +6,6 @@ on:
       - master
       - integration
 
-# Would be used only for Integration and Master branch building.
-  # schedule:
-    # - cron: 5 * * * *      
-
 jobs:
 
   BranchBuildAndTest:
@@ -50,8 +46,8 @@ jobs:
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
-    - name: Set gradle version to 6.0
-      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version
       run: ./gradlew --version
@@ -71,6 +67,10 @@ jobs:
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
+
+    - name: List artifacts
+      run:  |
+        ls -Al sdk/build/outputs/aar/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
@@ -115,8 +115,8 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Set gradle version
-      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version
       run: ./gradlew --version
