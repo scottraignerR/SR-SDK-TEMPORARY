@@ -1,9 +1,21 @@
-name: "APK Publisher"
-description: "Build & Publish APK on Github"
+name: "Release Publisher"
+description: "Publish Release on Github"
 author: "MikeHamilton-RW"
 inputs:
   GITHUB_TOKEN:
-    description: "Github secret token to allow automated publishing of APK to release."
+    description: "Github secret token to allow automated publishing of artifacts to a release."
+  GITHUB_REPOSITORY:
+    description: "Utilize the ${{ github.repository }} environment variable"
+  APP_FOLDER:
+    description: "apk, sdk, etc. for use when retrieving the output artifact"
+  OUTPUT_TYPE:
+    description: "apk, sdk, etc. for use when retrieving the output artifact"
+  RELEASE_TITLE:
+    description: "Utilize the ${{ steps.repo_name_output.outputs.repo_name }} environment variable"
+  VERSION_NUMBER:
+    description: "Utilize the ${{ steps.version_build_output.outputs.version_build }} environment variable"
+  COMMIT_SHA:
+    description: "Utilize the ${{ steps.commit_sha_step.outputs.commit_sha }} environment variable"
 runs:
   using: "docker"
   image: "Dockerfile"

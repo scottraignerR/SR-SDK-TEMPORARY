@@ -1,8 +1,5 @@
 FROM debian:10.1
 
-LABEL "repository"="https://github.com/realwear/WN-SDK-TEMPORARY/"
-LABEL "maintainer"="MikeHamilton-RW"
-
 RUN apt update \
 	&& apt -y upgrade \
 	&& apt install -y hub \
