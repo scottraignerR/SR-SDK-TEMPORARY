@@ -47,7 +47,7 @@ echo ${COMMITS} | jq '.[] | .commit.message, .sha, .html_url, .author.login, .co
 echo "* Commit of last release: $LAST_COMMMIT"
 echo "* Date of last release: $LAST_RELEASE_DATE"
 
-hub release create -a ./${APP_FOLDER}/build/outputs/${OUTPUT_TYPE}/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
+hub release create -a ./${APP_FOLDER}/build/outputs/**/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
 
