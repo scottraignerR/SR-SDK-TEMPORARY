@@ -44,8 +44,8 @@ jobs:
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
-    - name: Set gradle version
-      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version
       run: ./gradlew --version
@@ -66,11 +66,20 @@ jobs:
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
 
+    - name: List artifacts
+      run:  |
+        ls -al sdk/build/outputs/*
+
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
         path: sdk/build/outputs/aar
+
+    - name: Set branch as environment variable
+      run: echo "##[set-output name=branch_head_name;]${GITHUB_HEAD_REF}" &&
+        echo "##[set-output name=branch_base_name;]${GITHUB_BASE_REF}"
+      id: branch_name_output
 
       # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment
@@ -99,8 +108,8 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Set gradle version
-      run: chmod +x gradlew && ./gradlew wrapper --gradle-version=6.0
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version
       run: ./gradlew --version
