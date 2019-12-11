@@ -44,11 +44,14 @@ echo ${COMMITS} | jq '.[] | .commit.message, .sha, .html_url, .author.login, .co
 echo "* Commit of last release: $LAST_COMMMIT"
 echo "* Date of last release: $LAST_RELEASE_DATE"
 
-FILE_EXTENSION=${OUTPUT_FOLDER_PATH#app/build/outputs/}
-if [ $FILE_EXTENSION == "apk" ]; then
+FILE_EXTENSION=""
+if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
     ARTIFACT_FOLDER=${ARTIFACT_FOLDER}/release
+    FILE_EXTENSION="apk"
+elif [[ $OUTPUT_FOLDER_PATH == *"sdk"* ]]; then
+    FILE_EXTENSION="sdk"
 fi
+
 hub release create -a ./${ARTIFACT_FOLDER}/*.${FILE_EXTENSION} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
-
