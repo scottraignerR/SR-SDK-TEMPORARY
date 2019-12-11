@@ -49,7 +49,7 @@ if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
     ARTIFACT_FOLDER=${ARTIFACT_FOLDER}/release
     FILE_EXTENSION="apk"
 elif [[ $OUTPUT_FOLDER_PATH == *"sdk"* ]]; then
-    FILE_EXTENSION="sdk"
+    FILE_EXTENSION="aar"
 fi
 
 hub release create -a ./${ARTIFACT_FOLDER}/*.${FILE_EXTENSION} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
