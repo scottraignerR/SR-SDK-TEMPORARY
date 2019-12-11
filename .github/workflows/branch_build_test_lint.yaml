@@ -57,7 +57,7 @@ jobs:
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
-    
+
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
@@ -85,13 +85,13 @@ jobs:
 
     - name: List artifacts
       run:  |
-        ls -al **/build/outputs/*
+        ls -al ${{ steps.folder_name_output.outputs.folder_name }}/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
-        path: sdk/build/outputs/aar
+        path: ${{ steps.folder_name_output.outputs.folder_name }}
 
     - name: Login
       uses: atlassian/gajira-login@master
