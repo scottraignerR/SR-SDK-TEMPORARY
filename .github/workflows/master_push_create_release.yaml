@@ -44,7 +44,7 @@ jobs:
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
-    - name: Set gradle version
+    - name: Set gradlew file to executable
       run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version

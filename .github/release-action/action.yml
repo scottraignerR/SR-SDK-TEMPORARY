@@ -6,10 +6,8 @@ inputs:
     description: "Github secret token to allow automated publishing of artifacts to a release."
   GITHUB_REPOSITORY:
     description: "Utilize the github.repository environment variable"
-  APP_FOLDER:
-    description: "apk, sdk, etc. for use when retrieving the output artifact"
-  OUTPUT_TYPE:
-    description: "apk, sdk, etc. for use when retrieving the output artifact"
+  ARTIFACT_FOLDER:
+    description: "Utilize steps.folder_name_output.outputs.folder_name environment variable"
   RELEASE_TITLE:
     description: "Utilize the steps.repo_name_output.outputs.repo_name environment variable"
   VERSION_NUMBER:
