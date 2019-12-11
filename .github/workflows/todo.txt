@@ -1,9 +1,10 @@
 
 # TODO: Add list of requirements, so when incorporating into a new repo, we know exactly what
         # to look for and check off.
-# TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
-            # make is easier to identify which repo(s) is affected?
-# TODO: Cross repo builds
+# TODO: I'm not understanding the colleration between the GitHub repo names and the Components. 
+        # Should and can we put the repo names into the components field to 
+        # make is easier to identify which repo(s) is affected?
+# TODO: Cross repo builds (regression)
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#external-events-repository_dispatch
         # Hard way to send repository_dispatch(Use Action below instead): https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30668#M503
         # Scenario 1: Change pushed to WN-About. WN-About uses the action https://github.com/actions/checkout to checkout the SDK and builds.
