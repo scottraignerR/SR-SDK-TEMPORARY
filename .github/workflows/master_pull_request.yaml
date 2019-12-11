@@ -17,7 +17,7 @@ jobs:
       OUTPUT_FOLDER_PATH: "sdk/build/outputs/aar"
 
     steps:
-    
+
     - name: Generate build number
       uses: einaregilsson/build-number@v2
       with:
@@ -32,6 +32,15 @@ jobs:
 
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
+
+    - name: Clone WN-SDK if not ran in SDK repo
+      run: |
+         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
+            echo "Running clone"
+            git clone --branch integration https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            ls -al
+            mv WN-SDK ../
+         fi
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -74,20 +83,19 @@ jobs:
 
     - name: List artifacts
       run:  |
-        ls -al **/build/outputs/*
+        ls -al ${{ steps.folder_name_output.outputs.folder_name }}/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
-        path: sdk/build/outputs/aar
+        path: ${{ steps.folder_name_output.outputs.folder_name }}
 
     - name: Set branch as environment variable
       run: echo "##[set-output name=branch_head_name;]${GITHUB_HEAD_REF}" &&
         echo "##[set-output name=branch_base_name;]${GITHUB_BASE_REF}"
       id: branch_name_output
 
-      # For Pull Requests only
     - name: Post version and build number to Pull Request as a comment
       uses: mshick/add-pr-comment@v1
       with:

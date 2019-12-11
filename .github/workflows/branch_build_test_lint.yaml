@@ -93,16 +93,16 @@ jobs:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
         path: ${{ steps.folder_name_output.outputs.folder_name }}
 
+    - name: Set branch as environment variable
+      run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
+      id: branch_name_output
+
     - name: Login
       uses: atlassian/gajira-login@master
       env:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
         JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
         JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-
-    - name: Set branch as environment variable
-      run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
-      id: branch_name_output
 
       # TODO: Need to handle the failure. How?
     - name: Comment on issue
