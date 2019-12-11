@@ -86,3 +86,38 @@
             # https://techcommunity.microsoft.com/t5/Microsoft-Teams-Blog/GitHub-Code-better-together-with-GitHub-and-Microsoft-Teams/ba-p/659444
             # https://docs.microsoft.com/en-us/connectors/github/
             # https://zapier.com/apps/github/integrations/microsoft-teams    
+
+    # TESTING
+    - name: build-tools/29.0.2
+      continue-on-error: true 
+      run: ls -l $ANDROID_HOME/build-tools/29.0.2
+
+    # TESTING
+    - name: platform-tools
+      continue-on-error: true 
+      run: ls -l $ANDROID_HOME/platform-tools
+
+    # TESTING
+    - name: adb
+      continue-on-error: true 
+      run: $ANDROID_HOME/platform-tools/adb version
+
+    # TESTING
+    - name: zipalign
+      continue-on-error: true 
+      run: $ANDROID_HOME/build-tools/29.0.2/zipalign
+
+    # TESTING
+    - name: apksigner
+      continue-on-error: true 
+      run: $ANDROID_HOME/build-tools/29.0.2/apksigner version
+
+    # TESTING
+    - name: aapt2
+      continue-on-error: true 
+      run: /$ANDROID_HOME/build-tools/29.0.2/aapt2 version
+
+    # TESTING
+    - name: jarsigner
+      continue-on-error: true 
+      run: jarsigner
