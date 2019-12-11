@@ -32,14 +32,17 @@ jobs:
       run: echo "##[set-output name=folder_name;]${OUTPUT_FOLDER_PATH}"
       id: folder_name_output
 
-    - name: TESTING
-      run: |
-         if [[ $OUTPUT_FOLDER_PATH == *"sdk"* ]]; then
-            echo WOOHOO!!
-         fi
-
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
+
+    - name: Clone WN-SDK if not ran in SDK repo
+      run: |
+         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
+            echo "Running clone"
+            git clone --branch integration https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            ls -al
+            mv WN-SDK ../
+         fi
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
