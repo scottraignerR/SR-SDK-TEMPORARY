@@ -13,6 +13,8 @@ jobs:
       MAJOR_VERSION: 0
       MINOR_VERSION: 0
       PATCH_VERSION: 0
+      # Set this variable for each project. 
+      OUTPUT_FOLDER_PATH: "sdk/build/outputs/aar"
 
     steps:
 
@@ -21,11 +23,24 @@ jobs:
       with:
         token: ${{secrets.github_token}}
 
-    - name: Echo new build number
+    - name: Print new build number
       run: echo "Build number is $BUILD_NUMBER"
+
+    - name: Ouput folder as variable
+      run: echo "##[set-output name=folder_name;]${OUTPUT_FOLDER_PATH}"
+      id: folder_name_output
 
     - name: Run the actions/checkout lib v1
       uses: actions/checkout@v1
+
+    - name: Clone WN-SDK if not ran in SDK repo
+      run: |
+         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
+            echo "Running clone"
+            git clone --branch integration https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            ls -al
+            mv WN-SDK ../
+         fi
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -44,7 +59,7 @@ jobs:
     - name: Echo the four digit version
       run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
 
-    - name: Set gradle version
+    - name: Set gradlew file to executable
       run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
     - name: Check gradle version
@@ -62,17 +77,13 @@ jobs:
 
     - name: List artifacts
       run:  |
-        ls -al **/build/outputs/*
+        ls -al ${{ steps.folder_name_output.outputs.folder_name }}/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
-        path: sdk/build/outputs/aar
-
-    - name: Set the build number output
-      run: echo "##[set-output name=build_number;]$BUILD_NUMBER"
-      id: build_package_step
+        path: ${{ steps.folder_name_output.outputs.folder_name }}
 
     - name: Set the commit sha output for usage by release creation
       run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
@@ -83,8 +94,7 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
        GITHUB_REPOSITORY: ${{ github.repository }}
-       APP_FOLDER: sdk # Need dynamic solution
-       OUTPUT_TYPE: aar # Need dynamic solution
+       ARTIFACT_FOLDER: ${{ steps.folder_name_output.outputs.folder_name }}
        RELEASE_TITLE: ${{ steps.repo_name_output.outputs.repo_name }}
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}

@@ -41,13 +41,14 @@ echo ${COMMITS} | jq '.[] | .commit.message, .sha, .html_url, .author.login, .co
     done
 )
 
-# one line, ugly solution. Not ideal.
-# echo ${COMMITS} | jq -r '.[] | "* " + .commit?.message + " @" + .author?.login + " " + .commit.author.date' >> $FILENAME
-
 echo "* Commit of last release: $LAST_COMMMIT"
 echo "* Date of last release: $LAST_RELEASE_DATE"
 
-hub release create -a ./${APP_FOLDER}/build/outputs/**/*.${OUTPUT_TYPE} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
+FILE_EXTENSION=${OUTPUT_FOLDER_PATH#app/build/outputs/}
+if [ $FILE_EXTENSION == "apk" ]; then
+    ARTIFACT_FOLDER=${ARTIFACT_FOLDER}/release
+fi
+hub release create -a ./${ARTIFACT_FOLDER}/*.${FILE_EXTENSION} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
 
