@@ -14,6 +14,8 @@ inputs:
     description: "Utilize the steps.version_build_output.outputs.version_build environment variable"
   COMMIT_SHA:
     description: "Utilize the steps.commit_sha_step.outputs.commit_sha environment variable"
+  SIGNER:
+    description: "Utilize the steps.signed_aligned_artifact_output.outputs.release_artifact_signer environment variable"
 runs:
   using: "docker"
   image: "Dockerfile"
