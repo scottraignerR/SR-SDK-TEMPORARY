@@ -161,6 +161,7 @@ jobs:
         fi
 
     - name: Decrypt the Keystore (if applicable)
+      if: contains( github.repository, 'SDK' ) == false
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -176,6 +177,7 @@ jobs:
         fi
 
     - name: Sign the release apk (if applicable)
+      if: contains( github.repository, 'SDK' ) == false
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -193,6 +195,7 @@ jobs:
         fi
 
     - name: Verify the signing (if applicable)
+      if: contains( github.repository, 'SDK' ) == false
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
