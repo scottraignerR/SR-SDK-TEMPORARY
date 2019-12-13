@@ -2,16 +2,17 @@ name: RealWear Workflow
 
 on:
   push:
+    tags-ignore: 
+      - v*
   pull_request:
   repository_dispatch:
     types: [regression_test]
-  tags-ignore: 
-    - v*
 
 jobs:
 
 # See Confluence page for notes on repository dispatch shortcomings.
 
+  # TODO: Don't allow it to run on tag creation
   # TODO: Realign SDK and About yaml after repo dispatch is completed
   # TODO 1: Incorporate repository dispatch per chart
   # TODO 2: Create event that triggers on tag push (HAE does this accidentally?)
