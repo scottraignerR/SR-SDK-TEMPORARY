@@ -1,0 +1,338 @@
+name: RealWear Workflow
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: [regression_test] 
+
+jobs:
+
+  # TODO 1: Convert SDK repo to use this method (fix build.gradle style back to old, consume TEMP SDK below)
+  # TODO 2: Incorporate repository dispatch per chart
+  # TODO 3: Create event that triggers on tag push (HAE does this accidentally?)
+  # TODO 4: Need to handle system apps, probably a hardcoded list, then incorporate system app signing
+
+  # TODO 4: Place tests in own job.
+  BuildTestSign: # TODO 4: Find better name
+
+    runs-on: ubuntu-latest
+    env:
+############ Set these variables for each project ############
+      OUTPUT_FOLDER_PATH: "sdk/build/outputs/aar"
+      BUILD_TOOLS_VERSION: "29.0.2"
+      KEYSTORE_FILENAME: "my-release-key.jks"
+##############################################################
+
+    steps:
+
+    - name: ----------------------EVENT TYPES (only one should be checked)---------------------------
+      run: echo ""
+
+    - name: Push Event to branch except integration or master github.ref
+      if: github.event_name == 'push' && github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master'
+      run: |
+        echo "Push Event"
+        echo "::set-env name=SDK_BRANCH::integration"
+
+    - name: Push Event to integration
+      if: github.event_name == 'push' && github.ref == 'refs/heads/integration'
+      run: |
+        echo "Push Event"
+        echo "::set-env name=SDK_BRANCH::integration"
+
+    - name: Push Event to master
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      run: |
+        echo "Push Event"
+        echo "::set-env name=SDK_BRANCH::master"
+
+    - name: Pull Request Event to integration branch
+      if: github.event_name == 'pull_request' && github.base_ref == 'integration'
+      run: |
+        echo "Pull Request Event"
+        echo "::set-env name=SDK_BRANCH::integration"
+
+    - name: Pull Request Event to master branch
+      if: github.event_name == 'pull_request' && github.base_ref == 'master'
+      run: |
+        echo "Pull Request Event"
+        echo "::set-env name=SDK_BRANCH::master"
+
+# Which steps below will be triggered on which of the events? See chart.
+    - name: Repository Dispatch Event
+      if: github.event_name == 'repository_dispatch'
+      run: |
+        echo "Repository Dispatch Event"
+        echo "::set-env name=REP_DIS_BRANCH::${{ github.event.client_payload.branch }}"
+        echo "::set-env name=REP_DIS_ACTOR::${{ github.event.client_payload.actor }}"
+        echo "::set-env name=REP_DIS_SHA::${{ github.event.client_payload.sha }}"
+
+    - name: ---------------------------------------Begin build---------------------------------------
+      run: echo ""
+
+    - name: Generate build number
+      uses: einaregilsson/build-number@v2
+      with:
+        token: ${{secrets.github_token}}
+
+    - name: Print new build number
+      run: echo "Build number is $BUILD_NUMBER"
+
+    - name: Ouput folder name as variable
+      run: echo "##[set-output name=folder_name;]${OUTPUT_FOLDER_PATH}"
+      id: folder_name_output
+
+    - name: Run the actions/checkout lib v1
+      uses: actions/checkout@v1
+
+    - name: Clone WN-SDK if not ran in SDK repo
+      run: |
+         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
+            echo "Running clone"
+            git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            ls -al
+            mv WN-SDK ../
+         fi
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Get application version
+      run: echo "::set-env name=MAJOR_VERSION::$(cat app/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $1}')" &&
+        echo "::set-env name=MINOR_VERSION::$(cat app/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $2}')" &&
+        echo "::set-env name=PATCH_VERSION::$(cat app/build.gradle |  grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $3}')"
+
+    - name: Set the four digit version
+      run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      id: version_build_output
+
+    - name: Echo the four digit version
+      run: echo "Building application v${{ steps.version_build_output.outputs.version_build }}"
+
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
+
+    - name: Check gradle version
+      run: ./gradlew --version
+
+    - name: Build the Debug (All except push to master)
+      if: github.ref != 'refs/heads/master'
+      run: ./gradlew assembleDebug
+
+    - name: Build the Release
+      run: ./gradlew assembleRelease
+
+    - name: Run Unit Tests on Debug (All except push to master)
+      if: github.ref != 'refs/heads/master'
+      run: ./gradlew testDebugUnitTest
+
+    - name: Run Unit Tests on Release
+      run: ./gradlew testReleaseUnitTest
+
+    - name: Ouput repository name without owner as variable
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      id: repo_name_output
+
+    - name: List artifacts and capture release name as step output
+      run:  |
+        ls -al ${{ steps.folder_name_output.outputs.folder_name }}/*
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+            FULL_PATH=$(find ${OUTPUT_FOLDER_PATH}/release -maxdepth 1 -name "*.apk" -print)
+        elif [[ $OUTPUT_FOLDER_PATH == *"sdk"* ]]; then
+            FULL_PATH=$(find ${OUTPUT_FOLDER_PATH} -maxdepth 1 -name "*.aar" -print)
+        fi
+        echo "::set-env name=OUTPUT_RELEASE_FILENAME::${FULL_PATH##*/}"
+
+    - name: Zipalign the release apk
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME=${OUTPUT_RELEASE_FILENAME%.*}-aligned.${OUTPUT_RELEASE_FILENAME##*.}
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          zipalign -v -p 4 \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          echo "::set-env name=UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME::${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}"
+          set +x
+        fi
+
+    - name: Decrypt the Keystore
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          git clone --branch master https://${{ secrets.TOKEN }}@github.com/realwear/Keystore Keystore
+          mkdir $HOME/secrets
+          mv Keystore $HOME/secrets
+          sudo apt-get install gnupg
+          gpg --quiet --batch --yes --decrypt \
+            --passphrase="${{ secrets.GPG_PASSPHRASE }}" \
+            --output $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME} \
+            $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME}.gpg
+          set +x
+        fi
+
+    - name: Sign the release apk
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME=${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME%'u'*}signed-${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME##*'-'}
+          apksigner sign \
+            --ks $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME} \
+            --ks-key-alias ${{ secrets.KS_ALIAS }} \
+            --ks-pass pass:${{ secrets.KS_PASS }} \
+            --key-pass pass:${{ secrets.KEY_PASS }} \
+            --out ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          echo "::set-env name=SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME::${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}"
+          set +x
+        fi
+
+    - name: Verify the signing
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          apksigner verify ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          BADGING_DATA=$(echo $(aapt2 dump badging ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}))
+          VERSION_NAME=$(echo ${BADGING_DATA} | grep -o "versionName='[0-9]*.[0-9]*.[0-9]*-*[0-9]*" | awk -F= '{print $2}' | cut -c 2-)
+          SIGNED_BY=$(jarsigner -verify -verbose -certs \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} | grep "Signed by")
+          echo "##[set-output name=release_artifact_signer;]${SIGNED_BY}"
+          set +x
+        fi
+      id: signed_aligned_artifact_output
+
+    - name: Remove unsigned apks and rename final apk # TODO: Need to do this for aar files also
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME}
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
+          OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
+          OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
+          OUTPUT_FILENAME=${OUTPUT_FILENAME^}
+          mv \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_FILENAME}
+          set +x
+        fi
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
+        path: ${{ steps.folder_name_output.outputs.folder_name }}
+
+    - name: Set branch as environment variable for push (Push event only, except not integration or master)
+      if: github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
+      id: branch_name_output_push
+
+       # Still builds on push to master
+    - name: Login to Jira (Push event only, except not integration or master)
+      if: github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Comment on Jira issue for push (Push event only, except not integration or master)
+      if: github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      uses: atlassian/gajira-comment@master
+      continue-on-error: true # Continue in case Jira issue does not exist for this branch name
+      with:
+        issue: ${{ steps.branch_name_output_push.outputs.branch_name }}
+        comment: |
+          Build successful for ${{ github.repository }} 
+          version v${{ steps.version_build_output.outputs.version_build }} 
+          from branch "${{ steps.branch_name_output_push.outputs.branch_name }}"
+          submitted by ${{ github.actor }}
+          release version signed by "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+
+    - name: Set branch as environment variable (Pull Request only)
+      if: github.event_name == 'pull_request'
+      run: echo "##[set-output name=branch_head_name;]${GITHUB_HEAD_REF}" &&
+        echo "##[set-output name=branch_base_name;]${GITHUB_BASE_REF}"
+      id: branch_name_output_pull_request
+
+    - name: Post version and build number to Pull Request as a comment (Pull Request only)
+      if: github.event_name == 'pull_request'
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          Build successful for Pull Request into ${{ steps.branch_name_output_pull_request.outputs.branch_base_name }} 
+          from branch "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}" 
+          submitted for ${{ github.repository }} 
+          version v${{ steps.version_build_output.outputs.version_build }}
+          submitted by @${{ github.actor }}
+          release version signed by "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-repeats: false
+
+    - name: Comment on issue for pull request (Pull Request to integration only)
+      if: github.base_ref == 'integration'
+      uses: atlassian/gajira-comment@master
+      continue-on-error: true # Continue in case Jira issue does not exist for this branch name
+      with:
+        issue: ${{ steps.branch_name_output_pull_request.outputs.branch_head_name }} # The branch name should correlate with issue in Jira
+        comment: |
+          Build successful for Pull Request into ${{ steps.branch_name_output_pull_request.outputs.branch_base_name }} 
+          from branch "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}" 
+          submitted for ${{ github.repository }} 
+          version v${{ steps.version_build_output.outputs.version_build }}
+          submitted by ${{ github.actor }}
+          release version signed by "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+
+    - name: Set the commit sha output for usage by release creation (master only)
+      if: github.ref == 'refs/heads/master'
+      run: echo "##[set-output name=commit_sha;]$GITHUB_SHA"
+      id: commit_sha_step
+
+    - name: Create Github Release (master only)
+      if: github.ref == 'refs/heads/master'
+      uses: ./.github/release-action
+      env:
+       GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       GITHUB_REPOSITORY: ${{ github.repository }}
+       ARTIFACT_FOLDER: ${{ steps.folder_name_output.outputs.folder_name }}
+       RELEASE_TITLE: ${{ steps.repo_name_output.outputs.repo_name }}
+       VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
+       COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
+       SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+
+  Lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Run the actions/checkout lib v1
+     uses: actions/checkout@v1
+
+    - name: git clone WN-SDK
+      run: |
+        echo "Running clone"
+        git clone --branch integration https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+        ls -al
+        mv WN-SDK ../
+
+    - name: Set up JDK 1.8
+     uses: actions/setup-java@v1
+     with:
+       java-version: 1.8
+
+    - name: Set gradlew file to executable
+      run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
+
+    - name: Check gradle version
+     run: ./gradlew --version
+
+    - name: Run lint
+     run: ./gradlew lint
+
