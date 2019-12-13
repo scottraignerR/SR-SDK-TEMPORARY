@@ -314,12 +314,12 @@ jobs:
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
 
     - name: Repository Dispatch to WN-ABOUT-TEMPORARY
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: realwear/WN-ABOUT-TEMPORARY
-          event-type: my-event
-          client-payload: '{"branch": "${{ github.ref }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: realwear/WN-ABOUT-TEMPORARY
+        event-type: my-event
+        client-payload: '{"branch": "${{ github.ref }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
 
   # Lint:
 
