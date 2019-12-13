@@ -2,6 +2,8 @@
 
 hub checkout master
 
+set -x
+
 # FIND LAST RELEASE, GET HASH AND DATE OF HASH
 RESULT=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest")
 LAST_COMMMIT=$(echo $RESULT | jq -r '.target_commitish')
@@ -15,6 +17,7 @@ COMMITS=$(curl -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com
 FILENAME=release_notes.txt
 echo "${RELEASE_TITLE}_v${VERSION_NUMBER}" > $FILENAME
 echo "" >> ${FILENAME}
+echo "#### Release signed by: $SIGNER" >> ${FILENAME}
 echo "## What's changed since the last release:" >> ${FILENAME}
 echo "#### Last release date: $LAST_RELEASE_DATE" >> ${FILENAME}
 echo "#### Last release commit: $LAST_COMMMIT" >> ${FILENAME}
@@ -55,3 +58,5 @@ fi
 hub release create -a ./${ARTIFACT_FOLDER}/*.${FILE_EXTENSION} -F $FILENAME -t ${COMMIT_SHA} v${VERSION_NUMBER}
 
 rm $FILENAME
+
+set +x
