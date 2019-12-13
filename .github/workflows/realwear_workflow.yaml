@@ -8,14 +8,13 @@ on:
 
 jobs:
 
-# Cannot get version number?
-  # TODO 1: Convert SDK repo to use this method (fix build.gradle style back to old, consume TEMP SDK below)
-  # TODO 2: Incorporate repository dispatch per chart
-  # TODO 3: Create event that triggers on tag push (HAE does this accidentally?)
-  # TODO 4: Need to handle system apps, probably a hardcoded list, then incorporate system app signing
-
+  # TODO 1: Incorporate repository dispatch per chart
+  # TODO 2: Create event that triggers on tag push (HAE does this accidentally?)
+  # TODO 3: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
   # TODO 4: Place tests in own job.
-  BuildTestSign: # TODO 4: Find better name
+  # TODO 5: Find better name for job
+
+  BuildTestSign:
 
     runs-on: ubuntu-latest
     env:
@@ -242,7 +241,6 @@ jobs:
       run: echo "##[set-output name=branch_name;]${GITHUB_REF#refs/heads/}"
       id: branch_name_output_push
 
-       # Still builds on push to master
     - name: Login to Jira (Push event only, except not integration or master)
       if: github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       uses: atlassian/gajira-login@master
@@ -254,7 +252,7 @@ jobs:
     - name: Comment on Jira issue for push (Push event only, except not integration or master)
       if: github.ref != 'refs/heads/integration' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       uses: atlassian/gajira-comment@master
-      continue-on-error: true # Continue in case Jira issue does not exist for this branch name
+      continue-on-error: true
       with:
         issue: ${{ steps.branch_name_output_push.outputs.branch_name }}
         comment: |
@@ -287,9 +285,9 @@ jobs:
     - name: Comment on issue for pull request (Pull Request to integration only)
       if: github.base_ref == 'integration'
       uses: atlassian/gajira-comment@master
-      continue-on-error: true # Continue in case Jira issue does not exist for this branch name
+      continue-on-error: true
       with:
-        issue: ${{ steps.branch_name_output_pull_request.outputs.branch_head_name }} # The branch name should correlate with issue in Jira
+        issue: ${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}
         comment: |
           Build successful for Pull Request into ${{ steps.branch_name_output_pull_request.outputs.branch_base_name }} 
           from branch "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}" 
