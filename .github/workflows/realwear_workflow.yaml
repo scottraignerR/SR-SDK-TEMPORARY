@@ -146,7 +146,8 @@ jobs:
         fi
         echo "::set-env name=OUTPUT_RELEASE_FILENAME::${FULL_PATH##*/}"
 
-    - name: Zipalign the release apk
+    - name: Zipalign the release apk (if applicable)
+      if: $OUTPUT_FOLDER_PATH == *"apk"*
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -159,7 +160,7 @@ jobs:
           set +x
         fi
 
-    - name: Decrypt the Keystore
+    - name: Decrypt the Keystore (if applicable)
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -174,7 +175,7 @@ jobs:
           set +x
         fi
 
-    - name: Sign the release apk
+    - name: Sign the release apk (if applicable)
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -191,7 +192,7 @@ jobs:
           set +x
         fi
 
-    - name: Verify the signing
+    - name: Verify the signing (if applicable)
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
