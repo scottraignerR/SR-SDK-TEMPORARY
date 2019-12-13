@@ -13,6 +13,7 @@ jobs:
   # TODO 3: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
   # TODO 4: Place tests in own job.
   # TODO 5: Find better name for job
+  # TODO: Change WN-SDK-TEMPORARY to WN-SDK upon release   
 
   BuildTestSign:
 
@@ -90,7 +91,7 @@ jobs:
       run: |
          if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
             echo "Running clone"
-            git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
             ls -al
             mv WN-SDK ../
          fi
@@ -214,7 +215,7 @@ jobs:
         fi
       id: signed_aligned_artifact_output
 
-    - name: Remove unsigned apks and rename final apk # TODO: Need to do this for aar files also
+    - name: Remove unsigned apks and rename final apk
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -312,6 +313,15 @@ jobs:
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+
+    - name: Repository Dispatch to WN-ABOUT-TEMPORARY
+      if: contains( github.repository, 'SDK' )
+      uses: peter-evans/repository-dispatch@master
+      with:
+        token: ${{secrets.TOKEN}}
+        repository: realwear/WN-ABOUT-TEMPORARY
+        event-type: regression_test
+        client-payload: '{"branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
 
   # Lint:
 
