@@ -107,7 +107,11 @@ jobs:
         echo "::set-env name=PATCH_VERSION::$(cat **/build.gradle |  grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $3}')"
 
     - name: Set the four digit version
-      run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
+      run: |
+        if [[ $PATCH_VERSION == "" ]]; then
+          PATCH_VERSION="0"
+        fi
+        echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
       id: version_build_output
 
     - name: Echo the four digit version
