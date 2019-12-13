@@ -1,0 +1,95 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        // maven {
+        //   url "https://plugins.gradle.org/m2/"
+        // }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        // classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+    }
+}
+
+
+
+
+plugins {
+    id("java")
+    id("maven-publish")
+}
+
+plugins {
+  id "org.sonarqube" version "2.7"
+}
+
+// apply plugin: "org.sonarqube"
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+ext {
+    companyName = "RealWear"
+    appName = "RW-SDK"
+    groupId = "com.core.realwear.sdk"
+    majorVersion = 1
+    minorVersion = 13
+    patchVersion = 3
+    preRelease= ""
+    GitHubPackageUrl = "https://maven.pkg.github.com/realwear/WN-SDK"
+    artifactPath = "$buildDir/../sdk/build/outputs/aar/"
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri(project.ext.GitHubPackageUrl)
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            println getArtifacts()
+            groupId = project.ext.groupId
+            artifactId(project.ext.appName)
+            version(generateVersionName())
+            from(components.java)
+            // TODO: Finalize the output file name, but where will this break the process down the road?
+            artifact("$artifactPath$project.ext.companyName-$project.ext.appName-$version-release.aar"){
+                extension 'aar'
+            }
+            println getArtifacts()
+        }
+    }
+}
+
+public Integer generateVersionCode() {
+    // return project.getProperties().get("MIN_SDK_VERSION") * 1000000 + project.ext.majorVersion * 10000 + project.ext.minorVersion * 100 + project.ext.patchVersion
+    return project.ext.majorVersion * 10000 + project.ext.minorVersion * 100 + project.ext.patchVersion
+
+}
+
+public String generateVersionName() {
+    String versionName = "${project.ext.majorVersion}.${project.ext.minorVersion}.${project.ext.patchVersion}"
+    if (project.ext.preRelease != null && !project.ext.preRelease.isEmpty()) {
+        versionName = versionName + "-" + project.ext.preRelease
+    }
+    return versionName
+}
+
+task printVersionTest() {
+    doLast {
+        print generateVersionName()
+    }
+}
