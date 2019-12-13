@@ -90,7 +90,7 @@ jobs:
       run: |
          if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
             echo "Running clone"
-            git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK WN-SDK
+            git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
             ls -al
             mv WN-SDK ../
          fi
@@ -214,7 +214,7 @@ jobs:
         fi
       id: signed_aligned_artifact_output
 
-    - name: Remove unsigned apks and rename final apk # TODO: Need to do this for aar files also
+    - name: Remove unsigned apks and rename final apk
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
@@ -312,6 +312,14 @@ jobs:
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+
+    - name: Repository Dispatch to WN-ABOUT-TEMPORARY
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: realwear/WN-ABOUT-TEMPORARY
+          event-type: my-event
+          client-payload: '{"branch": "${{ github.ref }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
 
   # Lint:
 
