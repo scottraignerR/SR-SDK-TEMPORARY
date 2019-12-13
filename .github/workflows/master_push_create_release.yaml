@@ -9,12 +9,11 @@ jobs:
   MasterPushCreateRelease:
 
     runs-on: ubuntu-latest
-    env: 
-      MAJOR_VERSION: 0
-      MINOR_VERSION: 0
-      PATCH_VERSION: 0
-      # Set this variable for each project. 
+    env:
+      # -----Set these variables for each project-----
       OUTPUT_FOLDER_PATH: "sdk/build/outputs/aar"
+      BUILD_TOOLS_VERSION: "29.0.2"
+      KEYSTORE_FILENAME: "my-release-key.jks" # Need dynamic jks filename getter
 
     steps:
 
@@ -75,9 +74,91 @@ jobs:
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
       id: repo_name_output
 
-    - name: List artifacts
+    - name: List artifacts and capture release name as step output
       run:  |
         ls -al ${{ steps.folder_name_output.outputs.folder_name }}/*
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+            FULL_PATH=$(find ${OUTPUT_FOLDER_PATH}/release -maxdepth 1 -name "*.apk" -print)
+        elif [[ $OUTPUT_FOLDER_PATH == *"sdk"* ]]; then
+            FULL_PATH=$(find ${OUTPUT_FOLDER_PATH} -maxdepth 1 -name "*.aar" -print)
+        fi
+        echo "::set-env name=OUTPUT_RELEASE_FILENAME::${FULL_PATH##*/}"
+
+    - name: Zipalign the release apk
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME=${OUTPUT_RELEASE_FILENAME%.*}-aligned.${OUTPUT_RELEASE_FILENAME##*.}
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          zipalign -v -p 4 \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          echo "::set-env name=UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME::${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}"
+          set +x
+        fi
+
+    - name: Decrypt the Keystore
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          git clone --branch master https://${{ secrets.TOKEN }}@github.com/realwear/Keystore Keystore
+          mkdir $HOME/secrets
+          mv Keystore $HOME/secrets
+          sudo apt-get install gnupg
+          gpg --quiet --batch --yes --decrypt \
+            --passphrase="${{ secrets.GPG_PASSPHRASE }}" \
+            --output $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME} \
+            $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME}.gpg
+          set +x
+        fi
+
+    - name: Sign the release apk
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME=${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME%'u'*}signed-${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME##*'-'}
+          apksigner sign \
+            --ks $HOME/secrets/Keystore/AppSigning/${KEYSTORE_FILENAME} \
+            --ks-key-alias ${{ secrets.KS_ALIAS }} \
+            --ks-pass pass:${{ secrets.KS_PASS }} \
+            --key-pass pass:${{ secrets.KEY_PASS }} \
+            --out ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          echo "::set-env name=SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME::${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}"
+          set +x
+        fi
+
+    - name: Verify the signing
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          PATH=$PATH:$ANDROID_HOME/build-tools/${BUILD_TOOLS_VERSION}
+          apksigner verify ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          BADGING_DATA=$(echo $(aapt2 dump badging ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}))
+          VERSION_NAME=$(echo ${BADGING_DATA} | grep -o "versionName='[0-9]*.[0-9]*.[0-9]*-*[0-9]*" | awk -F= '{print $2}' | cut -c 2-)
+          SIGNED_BY=$(jarsigner -verify -verbose -certs \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} | grep "Signed by")
+          echo "##[set-output name=release_artifact_signer;]${SIGNED_BY}"
+          set +x
+        fi
+      id: signed_aligned_artifact_output
+
+    - name: Remove unsigned apks and rename final apk # TODO: Need to do this for aar files also
+      run: |
+        if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          set -x
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME}
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
+          OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
+          OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
+          OUTPUT_FILENAME=${OUTPUT_FILENAME^}
+          mv \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_FILENAME}
+          set +x
+        fi
 
     - name: Upload artifact
       uses: actions/upload-artifact@master
@@ -98,3 +179,5 @@ jobs:
        RELEASE_TITLE: ${{ steps.repo_name_output.outputs.repo_name }}
        VERSION_NUMBER: ${{ steps.version_build_output.outputs.version_build }}
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
+       SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
+

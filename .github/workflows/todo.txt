@@ -1,9 +1,10 @@
 
 # TODO: Add list of requirements, so when incorporating into a new repo, we know exactly what
         # to look for and check off.
-# TODO: I'm not understanding the colleration between the GitHub repo names and the Components. Should and can we put the repo names into the components field to 
-            # make is easier to identify which repo(s) is affected?
-# TODO: Cross repo builds
+# TODO: I'm not understanding the colleration between the GitHub repo names and the Components. 
+        # Should and can we put the repo names into the components field to 
+        # make is easier to identify which repo(s) is affected?
+# TODO: Cross repo builds (regression)
         # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#external-events-repository_dispatch
         # Hard way to send repository_dispatch(Use Action below instead): https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30668#M503
         # Scenario 1: Change pushed to WN-About. WN-About uses the action https://github.com/actions/checkout to checkout the SDK and builds.
@@ -85,3 +86,38 @@
             # https://techcommunity.microsoft.com/t5/Microsoft-Teams-Blog/GitHub-Code-better-together-with-GitHub-and-Microsoft-Teams/ba-p/659444
             # https://docs.microsoft.com/en-us/connectors/github/
             # https://zapier.com/apps/github/integrations/microsoft-teams    
+
+    # TESTING
+    - name: build-tools/29.0.2
+      continue-on-error: true 
+      run: ls -l $ANDROID_HOME/build-tools/29.0.2
+
+    # TESTING
+    - name: platform-tools
+      continue-on-error: true 
+      run: ls -l $ANDROID_HOME/platform-tools
+
+    # TESTING
+    - name: adb
+      continue-on-error: true 
+      run: $ANDROID_HOME/platform-tools/adb version
+
+    # TESTING
+    - name: zipalign
+      continue-on-error: true 
+      run: $ANDROID_HOME/build-tools/29.0.2/zipalign
+
+    # TESTING
+    - name: apksigner
+      continue-on-error: true 
+      run: $ANDROID_HOME/build-tools/29.0.2/apksigner version
+
+    # TESTING
+    - name: aapt2
+      continue-on-error: true 
+      run: /$ANDROID_HOME/build-tools/29.0.2/aapt2 version
+
+    # TESTING
+    - name: jarsigner
+      continue-on-error: true 
+      run: jarsigner
