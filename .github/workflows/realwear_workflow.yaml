@@ -314,11 +314,12 @@ jobs:
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
 
     - name: Repository Dispatch to WN-ABOUT-TEMPORARY
-      uses: peter-evans/repository-dispatch@v1
+      if: contains( github.repository, 'SDK' )
+      uses: peter-evans/repository-dispatch@master
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{secrets.github_token}}
         repository: realwear/WN-ABOUT-TEMPORARY
-        event-type: my-event
+        event-type: regression_test
         client-payload: '{"branch": "${{ github.ref }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
 
   # Lint:
