@@ -13,7 +13,7 @@ jobs:
   # TODO 3: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
   # TODO 4: Place tests in own job.
   # TODO 5: Find better name for job
-  # TODO: Change WN-SDK-TEMPORARY to WN-SDK upon release
+  # TODO: Change WN-SDK-TEMPORARY to WN-SDK upon release 
 
   BuildTestSign:
 
