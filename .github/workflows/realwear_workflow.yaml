@@ -3,7 +3,7 @@ name: RealWear Workflow
 on:
   push:
     branches:
-      - *
+      - '*'
     tags-ignore: 
       - v*
   pull_request:
