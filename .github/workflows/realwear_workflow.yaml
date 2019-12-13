@@ -8,6 +8,7 @@ on:
 
 jobs:
 
+# Cannot get version number?
   # TODO 1: Convert SDK repo to use this method (fix build.gradle style back to old, consume TEMP SDK below)
   # TODO 2: Incorporate repository dispatch per chart
   # TODO 3: Create event that triggers on tag push (HAE does this accidentally?)
@@ -101,9 +102,9 @@ jobs:
         java-version: 1.8
 
     - name: Get application version
-      run: echo "::set-env name=MAJOR_VERSION::$(cat app/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $1}')" &&
-        echo "::set-env name=MINOR_VERSION::$(cat app/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $2}')" &&
-        echo "::set-env name=PATCH_VERSION::$(cat app/build.gradle |  grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $3}')"
+      run: echo "::set-env name=MAJOR_VERSION::$(cat **/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $1}')" &&
+        echo "::set-env name=MINOR_VERSION::$(cat **/build.gradle | grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $2}')" &&
+        echo "::set-env name=PATCH_VERSION::$(cat **/build.gradle |  grep versionName | awk '{print $2}'| sed s/\"//g | sed s/\\./\\t/g | awk '{print $3}')"
 
     - name: Set the four digit version
       run: echo "##[set-output name=version_build;]$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION.$BUILD_NUMBER"
