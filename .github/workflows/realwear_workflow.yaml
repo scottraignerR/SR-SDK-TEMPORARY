@@ -147,7 +147,7 @@ jobs:
         echo "::set-env name=OUTPUT_RELEASE_FILENAME::${FULL_PATH##*/}"
 
     - name: Zipalign the release apk (if applicable)
-      if: contains( github.repository, 'SDK' )
+      if: contains( github.repository, 'SDK' ) == false
       run: |
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           set -x
