@@ -244,6 +244,7 @@ jobs:
     - name: Rename final artifact with version and remove unsigned artifacts
       run: |
         set -x
+        echo $OUTPUT_RELEASE_FILENAME
         REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
@@ -261,7 +262,7 @@ jobs:
         fi
         set +x
 
-    - name: Upload artifact
+    - name: Upload artifact to Github Action build
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
