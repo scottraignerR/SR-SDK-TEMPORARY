@@ -244,18 +244,16 @@ jobs:
     - name: Rename final artifact with version and remove unsigned artifacts
       run: |
         set -x
-        echo $OUTPUT_RELEASE_FILENAME
         REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
+          OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
+          OUTPUT_FILENAME=${OUTPUT_FILENAME^}
           mv \
             ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
             ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_FILENAME}
-          OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
-          OUTPUT_FILENAME=${OUTPUT_FILENAME^}
         else 
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.aar"
-          OUTPUT_RELEASE_FILENAME=${OUTPUT_FILENAME}
           mv \
             ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_RELEASE_FILENAME} \
             ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_FILENAME}
