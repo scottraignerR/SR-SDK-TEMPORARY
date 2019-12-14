@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - '*'
-    tags-ignore: 
+    tags-ignore:
       - v*
   pull_request:
   repository_dispatch:
@@ -116,7 +116,7 @@ jobs:
         set -x
         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
           echo "Running clone"
-          git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
+          git clone --branch ${SDK_BRANCH#refs/heads/} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
           ls -al
           mv WN-SDK ../
         fi
