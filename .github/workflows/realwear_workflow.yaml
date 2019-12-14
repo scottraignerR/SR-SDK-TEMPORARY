@@ -256,10 +256,9 @@ jobs:
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.aar"
           OUTPUT_RELEASE_FILENAME=${OUTPUT_FILENAME}
           mv \
-          ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME} \
-          ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_FILENAME}
+            ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_FILENAME}
         fi
-        
         set +x
 
     - name: Upload artifact
