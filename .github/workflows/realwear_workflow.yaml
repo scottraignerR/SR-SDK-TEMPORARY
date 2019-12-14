@@ -246,6 +246,9 @@ jobs:
         set -x
         REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME}
+          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
+          REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
           OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
           OUTPUT_FILENAME=${OUTPUT_FILENAME^}
