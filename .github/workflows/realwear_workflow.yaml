@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - '*'
-    tags-ignore: 
+    tags-ignore:
       - v*
   pull_request:
   repository_dispatch:
@@ -14,22 +14,21 @@ jobs:
 
 # See Confluence page for notes on repository dispatch shortcomings.
 
-  # TODO 1: Incorporate repository dispatch per chart
-  # TODO 2: Create event that triggers on tag push (HAE does this accidentally?)
-  # TODO 3: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
-  # TODO 4: Place tests in own job.
-  # TODO 5: Find better name for job
-  # TODO 6: Change WN-SDK-TEMPORARY to WN-SDK upon release
+  # TODO 1: Create event that triggers on tag push (HAE does this accidentally?)
+  # TODO 2: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
+  # TODO 3: Place tests in own job.
+  # TODO 4: Find better name for job
+  # TODO 5: Change WN-SDK-TEMPORARY to WN-SDK upon deployment
 
   BuildTestSign:
 
     runs-on: ubuntu-latest
     env:
-############ Set these variables for each project ############
+############ Set these variables for each project ###################################################
       OUTPUT_FOLDER_PATH: "sdk/build/outputs/aar"
       BUILD_TOOLS_VERSION: "29.0.2"
       KEYSTORE_FILENAME: "my-release-key.jks"
-##############################################################
+#####################################################################################################
 
     steps:
 
@@ -117,7 +116,7 @@ jobs:
         set -x
         if [[ $OUTPUT_FOLDER_PATH != *"sdk"* ]]; then
           echo "Running clone"
-          git clone --branch ${SDK_BRANCH} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
+          git clone --branch ${SDK_BRANCH#refs/heads/} https://${{ secrets.TOKEN }}@github.com/realwear/WN-SDK-TEMPORARY WN-SDK
           ls -al
           mv WN-SDK ../
         fi
@@ -242,13 +241,11 @@ jobs:
         fi
       id: signed_aligned_artifact_output
 
-    - name: Remove unsigned apks and rename final apk
+    - name: Rename final artifact with version and remove unsigned artifacts
       run: |
         set -x
+        REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
         if [[ $OUTPUT_FOLDER_PATH == *"apk"* ]]; then
-          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_RELEASE_FILENAME}
-          rm ${{ steps.folder_name_output.outputs.folder_name }}/release/${UNSIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME}
-          REPO_NAME=${{ steps.repo_name_output.outputs.repo_name }}
           OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.apk"
           OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
           OUTPUT_FILENAME=${OUTPUT_FILENAME^}
@@ -256,13 +253,14 @@ jobs:
             ${{ steps.folder_name_output.outputs.folder_name }}/release/${SIGNED_ALIGNED_OUTPUT_RELEASE_FILENAME} \
             ${{ steps.folder_name_output.outputs.folder_name }}/release/${OUTPUT_FILENAME}
         else 
-          OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.aar" 
-          OUTPUT_FILENAME=${OUTPUT_FILENAME,,}
-          OUTPUT_FILENAME=${OUTPUT_FILENAME^}
+          OUTPUT_FILENAME="${REPO_NAME#*'WN-'}_v${{ steps.version_build_output.outputs.version_build }}.aar"
+          mv \
+            ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_RELEASE_FILENAME} \
+            ${{ steps.folder_name_output.outputs.folder_name }}/${OUTPUT_FILENAME}
         fi
         set +x
 
-    - name: Upload artifact
+    - name: Upload artifact to Github Action build
       uses: actions/upload-artifact@master
       with:
         name: ${{ steps.repo_name_output.outputs.repo_name }}_v${{ steps.version_build_output.outputs.version_build }}
