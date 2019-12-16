@@ -160,7 +160,7 @@ jobs:
       run: ./gradlew testReleaseUnitTest
 
     - name: Ouput repository name without owner as variable
-      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#realwear/}"
+      run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#scottraignerR/}"
       id: repo_name_output
 
     - name: List artifacts and capture release name as step output
