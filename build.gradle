@@ -23,6 +23,8 @@ sonarqube {
     property "sonar.organization", "scottraigner"
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.login", "60392327d1c5099ba322791b82a4d093a5f32eab"
+  }
+}
 
 allprojects {
     repositories {
