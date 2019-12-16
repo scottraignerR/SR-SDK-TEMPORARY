@@ -75,7 +75,7 @@ jobs:
     - name: ---------------------------------------Begin Sonar---------------------------------------
       run: |
          echo "starting sonarcloud"
-        ./gradlew sonarqube
+         ./gradlew sonarqube
 
     - name: ---------------------------------------Begin build---------------------------------------
       run: echo ""
