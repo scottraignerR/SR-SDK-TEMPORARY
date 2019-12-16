@@ -85,6 +85,8 @@ jobs:
           echo "::set-env name=SDK_BRANCH::integration"
         elif [[ $REP_DIS_BRANCH == *"pull"* ]]; then
           echo "::set-env name=SDK_BRANCH::${{ github.event.client_payload.branch_head }}"
+        elif [[ -z $REP_DIS_BRANCH ]]; then
+          echo "::set-env name=SDK_BRANCH::integration"
         else
           echo "::set-env name=SDK_BRANCH::$REP_DIS_BRANCH"
         fi
