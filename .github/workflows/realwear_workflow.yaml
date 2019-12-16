@@ -346,6 +346,7 @@ jobs:
     - name: Repository Dispatch to WN-ABOUT-TEMPORARY
       if: contains( github.repository, 'SDK' )
       uses: peter-evans/repository-dispatch@master
+      continue-on-error: true
       with:
         token: ${{ secrets.TOKEN }}
         repository: realwear/WN-ABOUT-TEMPORARY
