@@ -73,9 +73,7 @@ jobs:
         echo "::set-env name=REP_DIS_SHA::${{ github.event.client_payload.sha }}"
 
     - name: ---------------------------------------Begin Sonar---------------------------------------
-      run: |
-         echo "starting sonarcloud"
-         ./gradlew sonarqube
+      run: ./gradlew sonarqube
 
     - name: ---------------------------------------Begin build---------------------------------------
       run: echo ""
