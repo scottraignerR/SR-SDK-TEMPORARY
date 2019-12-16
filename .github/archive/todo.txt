@@ -1,24 +1,16 @@
+# TODO 1: Create event that triggers on tag push (HAE does this accidentally?)
+# TODO 2: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
+# TODO 3: Place tests in own job.
+# TODO 4: Find better name for job
+# TODO 5: Change WN-SDK-TEMPORARY to WN-SDK upon deployment
 
 # TODO: Add list of requirements, so when incorporating into a new repo, we know exactly what
         # to look for and check off.
 # TODO: I'm not understanding the colleration between the GitHub repo names and the Components. 
         # Should and can we put the repo names into the components field to 
         # make is easier to identify which repo(s) is affected?
-# TODO: Cross repo builds (regression)
-        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#external-events-repository_dispatch
-        # Hard way to send repository_dispatch(Use Action below instead): https://github.community/t5/GitHub-Actions/Triggering-by-other-repository/m-p/30668#M503
-        # Scenario 1: Change pushed to WN-About. WN-About uses the action https://github.com/actions/checkout to checkout the SDK and builds.
-        # Scenario 2: Change pushed to WN-SDK. WN-SDK has https://github.com/defold/repository-dispatch event trigger that fires in Int-PR, Int-Merge, Mas-PR, and Mas-Merge actions,
-            # so regardless of where WN-SDK changes in only integration or master, we trip this event dispatch. We unfortunately have to trip it two times for each repository
-            # that is dependent on WN-SDK, one for each of the Int-Merge, Mas-Merge actions in the WN-About repo for example.
-        # Need to test, hopefully don't have issues like this: https://github.community/t5/GitHub-Actions/repository-dispatch-not-triggering-actions/m-p/33845#M1677
 # TODO: Push a package to GitHub Packages (needs much more testing).
         # Figure out how to delete previous packages in WN-SDK repo.
-# TODO: Create release repo to hold no source code, but only the collection of apks in a zip file in a release.
-# TODO: Need to use zipalign to align the app to 4-byte boundary prior to signing. Performed by Bamboo on line 223 of:
-        # https://github.com/realwear/BambooPlugins/blob/master/buildandroidproject/src/main/java/com/realwear/bamboo/android/buildandroidproject/BuildAndroidProject.java
-        # zipAlign.toString(), "-p", "4", apk.getAbsolutePath(), outputFile.toString());
-        # https://developer.android.com/studio/build/building-cmdline
 # TODO: Need to sign the Release build
         # https://github.com/marketplace/actions/sign-android-release\
         # https://developer.android.com/training/articles/keystore
@@ -48,21 +40,11 @@
         # WAS BLOCKED, no idea how to do this just yet, need to try method below.
         # aapt dump badging /path/to/apk | grep -c application-debuggable from:
         # https://stackoverflow.com/questions/7085644/how-to-check-if-apk-is-signed-or-debug-build
-# TODO: Incorporate actions/cache (Scott working on it)
-        # https://github.com/actions/cache
-# TODO: Incorporate and test cron schedule. NOT WORKING?
-# TODO: Auto check for gradle updates?
-        # https://github.com/MeilCli/gradle-update-check-action
 # TODO LONG TERM: Use emulator to run instrumented tests: 
         # https://github.com/vgaidarji/android-github-actions/tree/master/emulator
         # https://github.com/Malinskiy/action-android
         # https://android.googlesource.com/platform/external/adt-infra/+/958180293308f4be67f6369acb075503f84a08b1/emu-image/external/
 # TODO LONG TERM: Create an action that counts numbers of tests before and after, send message if number did not increase.
-# TODO: Incorporate SonarQube?
-        # Must download and install, so more than likely need to Dockerize it.
-        # Create a custom github action similar to release-action, but using sonarqube.
-        # OR incorporate gradle plugin, so devs will have visibility when they build locally? Hmmm. Probably not since they won't have it installed....
-        # https://hub.docker.com/_/sonarqube
 # TODO: Semantic pull requests, must have specific title in order to be merged
         # Will this assist us in the future?
         # https://probot.github.io/apps/semantic-pull-requests/
@@ -73,7 +55,6 @@
 # TODO LONG TERM: Add lint to pull requests
         # https://github.com/seferov/pr-lint-action
         # https://github.com/wagoid/commitlint-github-action
-# TODO: # Post build badge to PR comment and Jira comment
 # TODO: # Random features to investigate:
           # https://dependabot.com/blog/hello-github/
           # https://github.com/benjefferies/branch-protection-bot
@@ -86,38 +67,3 @@
             # https://techcommunity.microsoft.com/t5/Microsoft-Teams-Blog/GitHub-Code-better-together-with-GitHub-and-Microsoft-Teams/ba-p/659444
             # https://docs.microsoft.com/en-us/connectors/github/
             # https://zapier.com/apps/github/integrations/microsoft-teams    
-
-    # TESTING
-    - name: build-tools/29.0.2
-      continue-on-error: true 
-      run: ls -l $ANDROID_HOME/build-tools/29.0.2
-
-    # TESTING
-    - name: platform-tools
-      continue-on-error: true 
-      run: ls -l $ANDROID_HOME/platform-tools
-
-    # TESTING
-    - name: adb
-      continue-on-error: true 
-      run: $ANDROID_HOME/platform-tools/adb version
-
-    # TESTING
-    - name: zipalign
-      continue-on-error: true 
-      run: $ANDROID_HOME/build-tools/29.0.2/zipalign
-
-    # TESTING
-    - name: apksigner
-      continue-on-error: true 
-      run: $ANDROID_HOME/build-tools/29.0.2/apksigner version
-
-    # TESTING
-    - name: aapt2
-      continue-on-error: true 
-      run: /$ANDROID_HOME/build-tools/29.0.2/aapt2 version
-
-    # TESTING
-    - name: jarsigner
-      continue-on-error: true 
-      run: jarsigner
