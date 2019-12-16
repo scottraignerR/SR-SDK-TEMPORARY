@@ -72,8 +72,6 @@ jobs:
         echo ${{ github.event.client_payload.sha }}
         echo "::set-env name=REP_DIS_SHA::${{ github.event.client_payload.sha }}"
 
-    - name: ---------------------------------------Begin Sonar---------------------------------------
-      run: ./gradlew sonarqube
 
     - name: ---------------------------------------Begin build---------------------------------------
       run: echo ""
@@ -345,6 +343,11 @@ jobs:
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
 
+# SonarQube/SonarCloud
+    - name: Run SonarQube
+      run: ./gradlew sonarqube
+
+
 # WN-SDK Regression
     - name: Repository Dispatch to WN-ABOUT-TEMPORARY
       if: contains( github.repository, 'SDK' )
@@ -495,9 +498,6 @@ jobs:
   #     uses: actions/setup-java@v1
   #     with:
   #       java-version: 1.8
-
-  #   - name: Set gradlew file to executable
-  #     run: chmod +x gradlew # && ./gradlew wrapper --gradle-version=6.0
 
   #   - name: Check gradle version
   #     run: ./gradlew --version
