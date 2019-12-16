@@ -160,6 +160,9 @@ jobs:
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
 
+    - name: Run Sonarcloud
+      run: ./gradlew sonarqube
+
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#scottraignerR/}"
       id: repo_name_output
@@ -343,9 +346,6 @@ jobs:
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
 
-# SonarQube/SonarCloud
-    - name: Run SonarQube
-      run: ./gradlew sonarqube
 
 
 # WN-SDK Regression
