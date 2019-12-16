@@ -14,12 +14,6 @@ jobs:
 
 # See Confluence page for notes on repository dispatch shortcomings.
 
-  # TODO 1: Create event that triggers on tag push (HAE does this accidentally?)
-  # TODO 2: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
-  # TODO 3: Place tests in own job.
-  # TODO 4: Find better name for job
-  # TODO 5: Change WN-SDK-TEMPORARY to WN-SDK upon deployment
-
   BuildTestSign:
 
     runs-on: ubuntu-latest
@@ -353,7 +347,13 @@ jobs:
         token: ${{ secrets.TOKEN }}
         repository: realwear/WN-ABOUT-TEMPORARY
         event-type: regression_test
-        client-payload: '{"branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
+        client-payload: |
+          '{
+            "branch": "${{ github.ref }}", 
+            "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", 
+            "actor": "${{ github.actor }}", 
+            "sha": "${{ github.sha }}"
+          }'
 
   # Lint:
 
