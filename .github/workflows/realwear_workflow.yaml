@@ -14,12 +14,6 @@ jobs:
 
 # See Confluence page for notes on repository dispatch shortcomings.
 
-  # TODO 1: Create event that triggers on tag push (HAE does this accidentally?)
-  # TODO 2: Need to handle system apps, probably a hardcoded list, then incorporate system app signing steps
-  # TODO 3: Place tests in own job.
-  # TODO 4: Find better name for job
-  # TODO 5: Change WN-SDK-TEMPORARY to WN-SDK upon deployment
-
   BuildTestSign:
 
     runs-on: ubuntu-latest
@@ -91,6 +85,8 @@ jobs:
           echo "::set-env name=SDK_BRANCH::integration"
         elif [[ $REP_DIS_BRANCH == *"pull"* ]]; then
           echo "::set-env name=SDK_BRANCH::${{ github.event.client_payload.branch_head }}"
+        elif [[ -z $REP_DIS_BRANCH ]]; then
+          echo "::set-env name=SDK_BRANCH::integration"
         else
           echo "::set-env name=SDK_BRANCH::$REP_DIS_BRANCH"
         fi
@@ -346,6 +342,7 @@ jobs:
        COMMIT_SHA: ${{ steps.commit_sha_step.outputs.commit_sha }}
        SIGNER: "${{ steps.signed_aligned_artifact_output.outputs.release_artifact_signer }}"
 
+# WN-SDK Regression
     - name: Repository Dispatch to WN-ABOUT-TEMPORARY
       if: contains( github.repository, 'SDK' )
       uses: peter-evans/repository-dispatch@master
@@ -353,7 +350,124 @@ jobs:
         token: ${{ secrets.TOKEN }}
         repository: realwear/WN-ABOUT-TEMPORARY
         event-type: regression_test
-        client-payload: '{"branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}"}'
+        client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-About
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-About
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-BarcodeReader
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-BarcodeReader
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-Camera2
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-Camera2
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to ZoomControl
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-ZoomControl
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-DocumentViewer
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-DocumentViewer
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-BarcodeReader
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-BarcodeReader
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-Configuration
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-Configuration
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-FileBrowser
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-FileBrowser
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-ControlPanels
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-ControlPanels
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-ScrollKeyboard
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-ScrollKeyboard
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-BarcodeReader
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-BarcodeReader
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-MediaPlayer
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-MediaPlayer
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
+
+    # - name: Repository Dispatch to WN-HomeScreen
+    #   if: contains( github.repository, 'SDK' )
+    #   uses: peter-evans/repository-dispatch@master
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     repository: realwear/WN-HomeScreen
+    #     event-type: regression_test
+    #     client-payload: '{ "branch": "${{ github.ref }}", "branch_head": "${{ steps.branch_name_output_pull_request.outputs.branch_head_name }}", "actor": "${{ github.actor }}", "sha": "${{ github.sha }}" }'
 
   # Lint:
 
@@ -364,7 +478,7 @@ jobs:
   #   steps:
 
   #   - name: Run the actions/checkout lib v1
-  #     uses: actions/checkout@v1
+  #    uses: actions/checkout@v1
 
   #   - name: git clone WN-SDK
   #     run: |
