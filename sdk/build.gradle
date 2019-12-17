@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 
 android {
+    lintOptions {
+	aboutOnError false
+    }
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
 
