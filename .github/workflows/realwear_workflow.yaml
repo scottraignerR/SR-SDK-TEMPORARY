@@ -161,7 +161,7 @@ jobs:
       run: ./gradlew testReleaseUnitTest
 
     - name: Run Sonarcloud
-      run: gradle build sonarqube
+      run: gradle sonarqube
 
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#scottraignerR/}"
