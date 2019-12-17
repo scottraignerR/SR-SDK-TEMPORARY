@@ -147,7 +147,7 @@ jobs:
       run: ./gradlew --version
 
     - name: Run Sonarcloud
-      run: ./gradlew --info build sonarqube
+      run: ./gradlew sonarqube
       
     - name: Build the Debug (All except push to master)
       if: github.ref != 'refs/heads/master'
