@@ -148,6 +148,8 @@ jobs:
 
     - name: Run Sonarcloud
       run: ./gradlew sonarqube
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Build the Debug (All except push to master)
       if: github.ref != 'refs/heads/master'
