@@ -146,6 +146,11 @@ jobs:
     - name: Check gradle version
       run: ./gradlew --version
 
+    - name: Run Sonarcloud
+      run: ./gradlew sonarqube
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     - name: Build the Debug (All except push to master)
       if: github.ref != 'refs/heads/master'
       run: ./gradlew assembleDebug
@@ -159,9 +164,6 @@ jobs:
 
     - name: Run Unit Tests on Release
       run: ./gradlew testReleaseUnitTest
-
-    - name: Run Sonarcloud
-      run: gradle build sonarqube
 
     - name: Ouput repository name without owner as variable
       run: echo "##[set-output name=repo_name;]${GITHUB_REPOSITORY#scottraignerR/}"
